@@ -35,13 +35,13 @@ length' xs = let f x = 1 in
              somme (map f xs)
 
 -- 9
+-- TODO : build :
 
-build f x n = take n (iterate f x)
+build f x 0 = [x]
+build f x n = [x] ++ map f (build f x (n-1))
 
--- TODO : build' :
-
- build' f x n =
+build' f x n = take n (iterate f x)
 
 -- 10
 
-listeEntiers n = build (1+) 0 (n+1)
+listeEntiers n = build (1+) 0 n
