@@ -6,7 +6,8 @@ public class Tchat {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		receiveTchat();
+		sendTchat(arg[0]);
 
 	}
 

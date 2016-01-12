@@ -2,7 +2,6 @@ package Tchat;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
-import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.lang.String;
@@ -15,10 +14,9 @@ public class SendTchat {
 	 * @param args
 	 * @throws IOException 
 	 */
-	public static void main(String[] args) throws IOException {
+	public static void sendTchat(String message) throws IOException {
 		DatagramPacket p;
-		DatagramSocket s;
-		String message = args[0];
+		MulticastSocket s;
 		
 		InetAddress dst = InetAddress.getByName("224.0.0.1");
 		int port = 7654;
