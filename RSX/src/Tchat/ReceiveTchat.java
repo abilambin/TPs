@@ -1,25 +1,29 @@
+package Tchat;
+
 import java.net.*; 
 import java.io.*;
 
 
-public class ReceiveUDP {
+public class ReceiveTchat {
 
-		
 		
 	/**
 	 * @param args
 	 * @throws IOException 
 	 */
 	public static void main(String[] args) throws IOException {
-
-		DatagramSocket s; 
+		MulticastSocket s; 
 		DatagramPacket p; 
+		InetAddress dst = InetAddress.getByName("224.0.0.1");
 		
-		s = new DatagramSocket(Integer.parseInt(args[0]));
+		s = new MulticastSocket(7654);
 		p = new DatagramPacket(new byte[1024],1024);
 		
+		s.joinGroup(dst);
+		
 		s.receive(p);
-		System.out.println(p.getData()); 
+		String msg = new String(p.getData());
+		System.out.println(msg); 
 		
 		s.close(); 
 
