@@ -64,8 +64,10 @@ salle2(X,Y) :- contenu(X), contenu(Y), pancarte4(X,Y), not(pancarte3(X,Y)).
 % La seconde pancarte disait la verité, la premiere mentait.
 
 % Q10 */
-affiche1 :- salle1(X,Y), write('Salle 1 :\n Porte 1 : '), write(X),write('\n Porte 2 : '), write(Y).
-affiche2 :- salle2(X,Y), write('Salle 2 :\n Porte 1 : '), write(X),write('\n Porte 2 : '), write(Y).
+affiche1 :- salle1(X,Y), write('Salle 1 :\n Porte 1 : '), write(X),
+			   write('\n Porte 2 : '), write(Y).
+affiche2 :- salle2(X,Y), write('Salle 2 :\n Porte 1 : '), write(X),
+			   write('\n Porte 2 : '), write(Y).
 affiche3 :- salle3(X,Y,Z), write('Salle 3 :\n Porte 1 : '), write(X),
 			   write('\n Porte 2 : '), write(Y),
 			   write('\n Porte 3 : '), write(Z).
@@ -73,46 +75,31 @@ affiche3 :- salle3(X,Y,Z), write('Salle 3 :\n Porte 1 : '), write(X),
 % Troisieme salle
 
 % Q11
-porte1(tigre,princesse,vide).
-porte1(princesse,tigre,vide).
 
-porte2(tigre,princesse,vide).
-porte2(tigre,vide,princesse).
+pancarte5(_,_,vide).
+pancarte6(tigre,_,_).
+pancarte7(_,_,vide).
 
-porte3(tigre,princesse,vide).
-porte3(princesse,tigre,vide).
+porte1(princesse,Y,Z) :- contenu(Y), contenu(Z), pancarte5(princesse,Y,Z).
+porte1(tigre,Y,Z) :- contenu(Y), contenu(Z), not(pancarte5(tigre,Y,Z)).
+porte1(vide,Y,Z) :- contenu(Y), contenu(Z), pancarte5(vide,Y,Z).
+porte1(vide,Y,Z) :- contenu(Y), contenu(Z), not(pancarte5(vide,Y,Z)).
+
+porte2(X,princesse,Z) :- contenu(X), contenu(Z), pancarte6(X,princesse,Z).
+porte2(X,tigre,Z) :- contenu(X), contenu(Z), not(pancarte6(X,tigre,Z)).
+porte2(X,vide,Z) :- contenu(X), contenu(Z), pancarte6(X,vide,Z).
+porte2(X,vide,Z) :- contenu(X), contenu(Z), not(pancarte6(X,vide,Z)).
+
+porte3(X,Y,princesse) :- contenu(X), contenu(Y), pancarte7(X,Y,princesse).
+porte3(X,Y,tigre) :- contenu(X), contenu(Y), not(pancarte7(X,Y,tigre)).
+porte3(X,Y,vide) :- contenu(X), contenu(Y), pancarte7(X,Y,vide). 
+porte3(X,Y,vide):- contenu(X), contenu(Y), not(pancarte7(X,Y,vide)).
 
 % Q12
 contenu(vide).
 
-% X : princesse
-salle3(princesse,tigre,vide) :- porte1(princesse,tigre,vide),not(porte2(princesse,tigre,vide)),porte3(princesse,tigre,vide).
-salle3(princesse,tigre,vide) :- porte1(princesse,tigre,vide),not(porte2(princesse,tigre,vide)),not(porte3(princesse,tigre,vide)).
-
-salle3(princesse,vide,tigre) :- porte1(princesse,vide,tigre),not(porte2(princesse,vide,tigre)),porte3(princesse,vide,tigre).
-salle3(princesse,vide,tigre) :- porte1(princesse,vide,tigre),not(porte2(princesse,vide,tigre)),not(porte3(princesse,vide,tigre)).
-
-% X : tigre
-salle3(tigre,vide,princesse) :- porte1(tigre,vide,princesse),not(porte2(tigre,vide,princesse)),porte3(tigre,vide,princesse).
-salle3(tigre,vide,princesse) :- porte1(tigre,vide,princesse),not(porte2(tigre,vide,princesse)),not(porte3(tigre,vide,princesse)).
-
-salle3(tigre,princesse,vide) :- porte1(tigre,princesse,vide),not(porte2(tigre,princesse,vide)),porte3(tigre,princesse,vide).
-salle3(tigre,princesse,vide) :- porte1(tigre,princesse,vide),not(porte2(tigre,princesse,vide)),not((tigre,princesse,vide)).
-
-% X : vide
-salle3(vide,tigre,princesse) :- porte1(vide,tigre,princesse),not(porte2(vide,tigre,princesse)),porte3(vide,tigre,princesse).
-salle3(vide,tigre,princesse) :- porte1(vide,tigre,princesse),not(porte2(vide,tigre,princesse)),not(porte3(vide,tigre,princesse)).
-
-salle3(vide,princesse,tigre) :- porte1(vide,princesse,tigre),not(porte2(vide,princesse,tigre)),porte3(vide,princesse,tigre).
-salle3(vide,princesse,tigre) :- porte1(vide,princesse,tigre),not(porte2(vide,princesse,tigre)),not(porte3(vide,princesse,tigre).
-
 /*
 % Q13
-
-% ?- salle3(X,Y,Z).
-% X = princesse,
-% Y = tigre,
-% Z = vide .
 
 % Q14 : Arbre decisionnel
 */
