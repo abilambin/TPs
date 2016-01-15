@@ -15,7 +15,7 @@ salle1(X,Y) :- pancarte1(X,Y), pancarte2(X,Y).
 salle1(X,Y) :- contenu(X), contenu(Y), not(pancarte1(X,Y)), not(pancarte2(X,Y)).
 
 
-/* 
+/*
 % Q4
 % Solution :
 % Il y a une princesse derriere chacune des deux portes
@@ -51,8 +51,8 @@ salle2(X,Y) :- contenu(X), contenu(Y), pancarte4(X,Y), not(pancarte3(X,Y)).
 
 /*
 % Q7
-% Il y a une tigre derriere la porte 1
-% et un princesse derriere la porte 2.
+% Il y a un tigre derriere la porte 1
+% et une princesse derriere la porte 2.
 
 % ?- salle2(X,Y).
 % X = tigre,
@@ -66,7 +66,7 @@ salle2(X,Y) :- contenu(X), contenu(Y), pancarte4(X,Y), not(pancarte3(X,Y)).
 % Q10 */
 affiche1 :- salle1(X,Y), write('Salle 1 :\n Porte 1 : '), write(X),write('\n Porte 2 : '), write(Y).
 affiche2 :- salle2(X,Y), write('Salle 2 :\n Porte 1 : '), write(X),write('\n Porte 2 : '), write(Y).
-affiche3 :- salle3(X,Y,Z), write('Salle 3 :\n Porte 1 : '), write(X), 
+affiche3 :- salle3(X,Y,Z), write('Salle 3 :\n Porte 1 : '), write(X),
 			   write('\n Porte 2 : '), write(Y),
 			   write('\n Porte 3 : '), write(Z).
 
