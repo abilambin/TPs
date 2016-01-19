@@ -1,3 +1,4 @@
+module tp3 where 
 import Graphics.Gloss
 
 type Symbole  = Char
@@ -71,3 +72,5 @@ filtreSymbolesTortue (_,_,_,_,s) mot = [ x | x <- mot, elem x s]
 
 type EtatDessin = (EtatTortue, Path)
 -- 8
+interpreteSymbole :: Config -> EtatDessin -> Symbole -> EtatDessin
+interpreteSymbole
