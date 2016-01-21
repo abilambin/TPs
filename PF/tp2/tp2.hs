@@ -1,4 +1,4 @@
-import Graphics.Gloss
+-- import Graphics.Gloss
 
 -- 1
 
@@ -23,7 +23,7 @@ pasPascal xs = zipWith (+) (0:xs) (reverse (0:xs))
 pascal :: [[Integer]]
 
 pascal = iterate pasPascal [1]
-
+{-
 -- 5
 pointAintercaler :: Point -> Point -> Point
 
@@ -35,3 +35,8 @@ pasDragon :: Path -> Path
 pasDragon (x:y:xs) = x : (pointAintercaler x y) : (pasDragon2 xs)
 
 pasDragon2 (x:y:xs) = x : (pointAintercaler y x) : (pasDragon xs)
+
+-- 7
+dragon :: Point -> Point -> [Path]
+
+-}
