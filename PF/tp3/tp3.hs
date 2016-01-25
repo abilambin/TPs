@@ -1,4 +1,6 @@
-module tp3 where 
+-- Fabre Loïc - Lambin Abigaïl - TP3
+
+module tp3 where
 import Graphics.Gloss
 
 type Symbole  = Char
