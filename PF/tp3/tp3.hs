@@ -1,6 +1,6 @@
 -- Fabre Loïc - Lambin Abigaïl - TP3
 
-module tp3 where
+module Tp3 where
 import Graphics.Gloss
 
 type Symbole  = Char
@@ -11,20 +11,19 @@ type LSysteme = [Mot]
 
 -- 1
 motSuivant :: Regles -> Mot -> Mot
-motSuivant r [] = []
-motSuivant r (x:xs) = (r x) ++ motSuivant r xs
+motSuivant r = foldr ((++) . r) []
 
 motSuivant' :: Regles -> Mot -> Mot
 motSuivant' r [] = []
 motSuivant' r xs = concat [r x | x <- xs]
 
 motSuivant'' :: Regles -> Mot -> Mot
-motSuivant'' r xs = concatMap r xs
+motSuivant'' = concatMap
 
 -- 2
 flocon :: Symbole -> Mot
-flocon s | s=='+' = ['+']
-         | s=='-' = ['-']
+flocon s | s=='+' = "+"
+         | s=='-' = "-"
          | s=='F' = "F-F++F-F"
 
 -- 3
@@ -75,4 +74,19 @@ filtreSymbolesTortue (_,_,_,_,s) mot = [ x | x <- mot, elem x s]
 type EtatDessin = (EtatTortue, Path)
 -- 8
 interpreteSymbole :: Config -> EtatDessin -> Symbole -> EtatDessin
-interpreteSymbole
+interpreteSymbole conf (etat,xs) s | s=='F' = (avance conf etat,fst(avance conf etat):xs)
+                                   | s=='+' = (tourneAGauche conf etat,xs)
+                                   | s=='-' = (tourneADroite conf etat,xs)
+                                   | otherwise = (etat,xs)
+-- 9
+aux :: Config -> EtatDessin -> Mot -> EtatDessin
+-- TODO : corriger : itérer la fonction interpretSymbole
+aux _ [] = error "Mot vide"
+aux conf [x] = interpreteSymbole conf (etatInitial conf,[]) x
+aux conf@(etat,l,ech,a,zs) (x:xs) = aux (fst(interpreteSymbole conf (etat,[]) x),l,ech,a,zs) (xs)
+
+interpreteMot :: Config -> Mot -> Picture
+interpreteMot conf xs = Line (snd(aux conf xs))
+
+dessin = interpreteMot (((-150,0),0),100,1,pi/3,"F+-") "F+F--F+F"
+main = display (InWindow "L-système" (1000, 1000) (0, 0)) white dessin
