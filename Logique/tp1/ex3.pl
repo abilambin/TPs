@@ -30,6 +30,9 @@ porte3(X,Y,vide):- contenu(X), contenu(Y), not(pancarte7(X,Y,vide)).
 
 salle3(X,Y,Z) :- porte1(X,Y,Z), porte2(X,Y,Z), porte3(X,Y,Z), not(X=Y), not(X=Z), not(Y=Z).
 
+affiche3 :- salle3(X,Y,Z), write('Salle 3 :\n Porte 1 : '), write(X),
+			   write('\n Porte 2 : '), write(Y),
+			   write('\n Porte 3 : '), write(Z).
 /*
 % Q13
 ?- salle3(X,Y,Z).

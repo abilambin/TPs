@@ -81,12 +81,20 @@ interpreteSymbole conf (etat,xs) s | s=='F' = (avance conf etat,fst(avance conf
 -- 9
 aux :: Config -> EtatDessin -> Mot -> EtatDessin
 -- TODO : corriger : itérer la fonction interpretSymbole
-aux _ [] = error "Mot vide"
-aux conf [x] = interpreteSymbole conf (etatInitial conf,[]) x
-aux conf@(etat,l,ech,a,zs) (x:xs) = aux (fst(interpreteSymbole conf (etat,[]) x),l,ech,a,zs) (xs)
+aux _ _ [] = error "Mot vide"
+aux conf _ [x] = interpreteSymbole conf (etatInitial conf,[]) x
+aux conf@(etat,l,ech,a,zs) etatA (x:xs) = aux (( fst(interpreteSymbole conf (etat,[]) x),l,ech,a,zs) (fst(etat)) (xs))
 
 interpreteMot :: Config -> Mot -> Picture
-interpreteMot conf xs = Line (snd(aux conf xs))
+interpreteMot conf xs = Line (aux conf (etatInitial conf,fst(etatInitial conf)) xs)
 
 dessin = interpreteMot (((-150,0),0),100,1,pi/3,"F+-") "F+F--F+F"
 main = display (InWindow "L-système" (1000, 1000) (0, 0)) white dessin
+
+
+
+interpreteMot2 :: Config -> Mot -> Picture
+interpreteMot2 _ _ = Line [(0,0),(10,10),(20,20),(30,10),(40,20),(50,10),(60,0)]
+
+dessin2 = interpreteMot2 (((-150,0),0),100,1,pi/3,"F+-") ""
+main2 = display (InWindow "L-système" (1000, 1000) (0, 0)) white dessin2

@@ -68,6 +68,4 @@ affiche1 :- salle1(X,Y), write('Salle 1 :\n Porte 1 : '), write(X),
 			   write('\n Porte 2 : '), write(Y).
 affiche2 :- salle2(X,Y), write('Salle 2 :\n Porte 1 : '), write(X),
 			   write('\n Porte 2 : '), write(Y).
-affiche3 :- salle3(X,Y,Z), write('Salle 3 :\n Porte 1 : '), write(X),
-			   write('\n Porte 2 : '), write(Y),
-			   write('\n Porte 3 : '), write(Z).
+
