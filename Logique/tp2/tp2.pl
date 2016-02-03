@@ -81,27 +81,23 @@ sous_ensemble([X|XS],[Y|YS]) :- X=Y, sous_ensemble(XS,[Y|YS]), !.
 sous_ensemble([X|XS],[Y|YS]) :- sous_ensemble([X],YS), sous_ensemble(XS,[Y|YS]).
 
 % Q19
-/* TODO */
 union([],[],[]).
 union(XS,[],XS).
-union([],YS,YS).
 union(XS,YS,YS) :- sous_ensemble(XS,YS), !.
-union([X|XS],YS,L) :- ajoute_ensemble(X,YS,L), union(XS,YS,L).
+union([X|XS],YS,L) :- sous_ensemble([X],YS), union(XS,YS,L), !.
+union([X|XS],YS,[X|L]) :- union(XS,YS,L).
 
+% Q20
+intersect([],_,[]) :- !.
+intersect(_,[],[]) :- !.
+intersect(XS,YS,XS) :- sous_ensemble(XS,YS), !.
+intersect(XS,YS,YS) :- sous_ensemble(YS,XS), !.
+intersect([X|XS],YS,[X|L]) :- sous_ensemble([X],YS), intersect(XS,YS,L).
+intersect([_|XS],YS,L) :- intersect(XS,YS,L), !.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+% Q21
+diff([],_,[]) :- !.
+diff(_,[],[]) :- !.
+diff(XS,YS,[]) :- sous_ensemble(XS,YS), !.
+diff([X|XS],YS,[X|L]) :- not(sous_ensemble([X],YS)), diff(XS,YS,L), !.
+diff([_|XS],YS,L) :- diff(XS,YS,L), !.
