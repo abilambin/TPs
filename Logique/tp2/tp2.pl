@@ -76,7 +76,32 @@ ajoute_ensemble(X,[Y|YS],[Y|YS]):- X=Y.
 ajoute_ensemble(X,[Y|YS],[Y|L]):- ajoute_ensemble(X,YS,L).
 
 % Q18
-% TODO, marche pour 1 element
 sous_ensemble([],_).
-sous_ensemble(X,[Y|_]) :- X=Y.
-sous_ensemble(X,[_|YS]) :- sous_ensemble(X,YS).
+sous_ensemble([X|XS],[Y|YS]) :- X=Y, sous_ensemble(XS,[Y|YS]), !.
+sous_ensemble([X|XS],[Y|YS]) :- sous_ensemble([X],YS), sous_ensemble(XS,[Y|YS]).
+
+% Q19
+/* TODO */
+union([],[],[]).
+union(XS,[],XS).
+union([],YS,YS).
+union(XS,YS,YS) :- sous_ensemble(XS,YS), !.
+union([X|XS],YS,L) :- ajoute_ensemble(X,YS,L), union(XS,YS,L).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
