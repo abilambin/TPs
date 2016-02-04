@@ -16,11 +16,11 @@ mapArbre :: (a -> b) -> Arbre c a -> Arbre c b
 mapArbre _ Feuille  = Feuille
 mapArbre f (Noeud val coul g d) =
  Noeud (f val) coul (mapArbre f g) (mapArbre f d)
-
+{-
 foldArbre :: (a -> b -> b -> b) -> b -> Arbre c a -> b
 foldArbre _ v Feuille = v 
 foldArbre f v (Noeud val _ g d) = f val (foldArbre f v g) (foldArbre f v d)
-
+-}
 -- 3
 hauteur :: Arbre c a -> Int
 hauteur Feuille  = 0
@@ -53,13 +53,19 @@ prop_taillePeigne xs = length xs == taille (peigneGauche xs)
 -- 7
 estComplet :: Arbre c a -> Bool
 estComplet Feuille = True
-estComplet (Noeud _ _ g d) = (taille g) == (taille d)
+estComplet (Noeud _ _ g d) = ((taille g) == (taille d)) && (estComplet g) && (estComplet d)
 
-arbCompletTest = Noeud 14 "vert" (Noeud 18 "vert" Feuille Feuille) (Noeud 51 "vert" Feuille Feuille)
+
+arbCompletTest  = Noeud 18 "vert" Feuille Feuille
+arbCompletTest2 = Noeud 14 "vert" (Noeud 18 "vert" Feuille Feuille) (Noeud 51 "vert" Feuille Feuille)
+
+foldArbre :: (a -> b -> b -> b) -> b -> Arbre c a -> b
+foldArbre _ v Feuille = v 
+foldArbre f v (Noeud val _ g d) = f val (foldArbre f v g) (foldArbre f v d)
 
 estComplet' :: Arbre c a -> Bool
-estComplet' Feuille = True
-estComplet' (Noeud _ _ g d) = (taille g) == (taille d)
+estComplet' = foldArbre (\_ y z -> y && z ) True
 
+arbPasCompletTest = Noeud 14 "vert" (Noeud 18 "vert" (Noeud 182 "vert" Feuille Feuille) Feuille) (Noeud 51 "vert"(Noeud 512 "vert" Feuille Feuille)  Feuille)
 
 -- 8
