@@ -24,11 +24,11 @@ foldArbre f v (Noeud val _ g d) = f val (foldArbre f v g) (foldArbre f v d)
 -- 3
 hauteur :: Arbre c a -> Int
 hauteur Feuille  = 0
-hauteur (Noeud _ _ g d) = 1 + (max (hauteur g) (hauteur d))
+hauteur (Noeud _ _ g d) = 1 + max (hauteur g) (hauteur d)
 
 taille :: Arbre c a -> Int
 taille Feuille  = 0
-taille (Noeud _ _ g d) = 1 + (taille g) + (taille d)
+taille (Noeud _ _ g d) = 1 + taille g + taille d
 
 arbTest = Noeud 14 "vert" (Noeud 18 "vert" (Noeud 42 "vert" Feuille Feuille) Feuille) (Noeud 51 "vert" Feuille Feuille)
 
@@ -48,12 +48,12 @@ prop_hauteurPeigne xs = length xs == hauteur (peigneGauche xs)
 
 -- 6
 prop_taillePeigne xs = length xs == taille (peigneGauche xs)
--- prop_map
+-- prop_map f = sum (mapArbre f a) == mapArbre f (sum a)
 
 -- 7
 estComplet :: Arbre c a -> Bool
 estComplet Feuille = True
-estComplet (Noeud _ _ g d) = ((taille g) == (taille d)) && (estComplet g) && (estComplet d)
+estComplet (Noeud _ _ g d) = (taille g == taille d) && estComplet g && estComplet d
 
 
 arbCompletTest  = Noeud 18 "vert" Feuille Feuille
@@ -73,8 +73,50 @@ prop_estCompletPeigne xs = not (estComplet (peigneGauche xs))
 -- 9
 complet :: Int -> [(c, a)] -> Arbre c a
 complet 0 [] = Feuille
-complet 1 [(coul, val)] = (Noeud val coul Feuille Feuille)
+complet 1 [(coul, val)] = Noeud val coul Feuille Feuille
 complet n xs = Noeud val coul g d 
-  where g          = (complet (n-1) (take (n-1) xs))
-        d          = (complet (n-1) (drop (n) xs))
+  where g          = complet (n-1) (take (n-1) xs)
+        d          = complet (n-1) (drop n xs)
         (coul,val) = xs !! (n-1)
+
+
+complet2 = Noeud 'a' () (Noeud 'b' () Feuille Feuille) (Noeud 'c' () Feuille Feuille)
+
+-- 10
+-- La fonction en question s'appelle repeat
+repeat' :: a -> [a]
+repeat' = iterate id
+
+-- 11
+bizarre :: [a] -> [((), a)]
+bizarre = map (\x ->((),x))
+
+l = bizarre ['a'..]
+
+-- 12
+aplatit :: Arbre c a -> [(c,a)]
+aplatit Feuille = []
+aplatit (Noeud val coul g d) = concat [[(coul,val)], aplatit g, aplatit d]
+
+-- 13
+element :: Eq a => a -> Arbre c a -> Bool
+element _ Feuille = False
+element x (Noeud val _ g d) | x==val = True
+							| otherwise = element x g || element x d
+
+-- 14
+noeud :: (c -> String) -> (a -> String) -> (c,a) -> String
+noeud f g (c,a) = g a ++ f c
+
+coul2S coul = " [color=" ++ coul ++", fontcolor=" ++ coul ++"]"
+val2S val = "" ++ val
+
+noeudSpec = noeud coul2S val2S
+
+-- 15
+-- TODO !
+arcs :: Arbre c a -> [(a,a)]
+arcs Feuille = []
+arcs (Noeud val coul Feuille d@(Noeud vald could gd dd)) = concat [[(val,vald)], arcs d]
+arcs (Noeud val coul g@(Noeud valg coulg gg dg) Feuille) = concat [[(val,valg)], arcs g]
+arcs (Noeud val coul g@(Noeud valg coulg gg dg) d@(Noeud vald could gd dd)) = concat [[(val,valg)], [(val,vald)], arcs g, arcs d]

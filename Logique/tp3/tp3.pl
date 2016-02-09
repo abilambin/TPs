@@ -60,7 +60,7 @@ carres([X1|[X2|[X3]]],L):- decoupe(X1,X2,X3,L).
   
 % Q10
 % TODO
-solution(XS) :- bonnetaille(XS,9), verifie(XS).
+solution([X|XS]) :- bonnetaille(X,9), verifie(X), solution(XS).
 
 
 
