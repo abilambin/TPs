@@ -53,15 +53,14 @@ prop_taillePeigne xs = length xs == taille (peigneGauche xs)
 -- 7
 estComplet :: Arbre c a -> Bool
 estComplet Feuille = True
-estComplet (Noeud _ _ g d) = ((hauteur g) == (hauteur d)) && (estComplet g) && (estComplet d)
+estComplet (Noeud _ _ g d) = ((taille g) == (taille d)) && (estComplet g) && (estComplet d)
 
 
 arbCompletTest  = Noeud 18 "vert" Feuille Feuille
 arbCompletTest2 = Noeud 14 "vert" (Noeud 18 "vert" Feuille Feuille) (Noeud 51 "vert" Feuille Feuille)
 
--- TODO estComplet avec Fold
---estComplet' :: Arbre c a -> Bool
---estComplet' = foldArbre (\_ y z -> y && z ) True
+estComplet' :: Arbre c a -> Bool
+estComplet' arbre = fst (foldArbre (\ _ (jeSuisComplet, h_g) (jeSuisComplet', h_d) -> (h_g == h_d && jeSuisComplet && jeSuisComplet', fromInteger (h_g + 1) )) (True, 0) arbre)
 
 arbPasCompletTest = Noeud 14 "vert" (Noeud 18 "vert" (Noeud 182 "vert" Feuille Feuille) Feuille) (Noeud 51 "vert"(Noeud 512 "vert" Feuille Feuille)  Feuille)
 
