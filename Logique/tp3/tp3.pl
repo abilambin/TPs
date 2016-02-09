@@ -55,11 +55,12 @@ decoupe([],[],[],[]).
 decoupe([X1|[X2|[X3|XS]]],[Y1|[Y2|[Y3|YS]]],[Z1|[Z2|[Z3|ZS]]],[[X1|[X2|[X3|[Y1|[Y2|[Y3|[Z1|[Z2|[Z3]]]]]]]]]|L]):- decoupe(XS,YS,ZS,L).
 
 % Q9
--- marche pas
 carres([],[]).
-carres([X1|[X2|[X3|XS]]],L):- decoupe(X1,X2,X3,L), carres(XS,L).
-
-
+carres([X1|[X2|[X3]]],L):- decoupe(X1,X2,X3,L).
+  
+% Q10
+% TODO
+solution(XS) :- bonnetaille(XS,9), verifie(XS).
 
 
 
