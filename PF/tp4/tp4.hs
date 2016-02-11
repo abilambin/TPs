@@ -80,7 +80,12 @@ complet n xs = Noeud val coul g d
         (coul,val) = xs !! (n-1)
 
 
-complet2 = Noeud 'a' () (Noeud 'b' () Feuille Feuille) (Noeud 'c' () Feuille Feuille)
+complet2 = Noeud 'b' () (Noeud 'a' () Feuille Feuille) (Noeud 'c' () Feuille Feuille)
+
+complet3 = Noeud 'd' () (Noeud 'b' ()  (Noeud 'a' () Feuille Feuille) (Noeud 'c' () Feuille Feuille)) (Noeud 'f' ()  (Noeud 'e' () Feuille Feuille) (Noeud 'g' () Feuille Feuille))
+
+complet4 = Noeud 'h' () (Noeud 'd' () (Noeud 'b' ()  (Noeud 'a' () Feuille Feuille) (Noeud 'c' () Feuille Feuille)) (Noeud 'f' ()  (Noeud 'e' () Feuille Feuille) (Noeud 'g' () Feuille Feuille))) (Noeud 'l' () (Noeud 'j' ()  (Noeud 'i' () Feuille Feuille) (Noeud 'k' () Feuille Feuille)) (Noeud 'n' ()  (Noeud 'm' () Feuille Feuille) (Noeud 'o' () Feuille Feuille)))
+
 
 -- 10
 -- La fonction en question s'appelle repeat
@@ -96,7 +101,7 @@ l = bizarre ['a'..]
 -- 12
 aplatit :: Arbre c a -> [(c,a)]
 aplatit Feuille = []
-aplatit (Noeud val coul g d) = concat [[(coul,val)], aplatit g, aplatit d]
+aplatit (Noeud val coul g d) = concat [aplatit g, [(coul,val)], aplatit d]
 
 -- 13
 element :: Eq a => a -> Arbre c a -> Bool
@@ -109,14 +114,22 @@ noeud :: (c -> String) -> (a -> String) -> (c,a) -> String
 noeud f g (c,a) = g a ++ f c
 
 coul2S coul = " [color=" ++ coul ++", fontcolor=" ++ coul ++"]"
-val2S val = "" ++ val
+val2S val = val:[]
 
 noeudSpec = noeud coul2S val2S
 
 -- 15
--- TODO !
-arcs :: Arbre c a -> [(a,a)]
+arcs :: Arbre c a -> [(a,a)] 
 arcs Feuille = []
+arcs (Noeud val coul Feuille Feuille) = []
 arcs (Noeud val coul Feuille d@(Noeud vald could gd dd)) = concat [[(val,vald)], arcs d]
 arcs (Noeud val coul g@(Noeud valg coulg gg dg) Feuille) = concat [[(val,valg)], arcs g]
 arcs (Noeud val coul g@(Noeud valg coulg gg dg) d@(Noeud vald could gd dd)) = concat [[(val,valg)], [(val,vald)], arcs g, arcs d]
+
+-- 16
+arc :: (a -> String) -> (a,a) -> String
+arc f (valM,valF) = f valM ++ " -> " ++ f valF
+
+-- 17
+-- dotise :: String -> (c -> String) -> (a -> String) -> Arbre c a -> String
+-- dotise nameArb f g a
