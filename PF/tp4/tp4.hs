@@ -131,5 +131,12 @@ arc :: (a -> String) -> (a,a) -> String
 arc f (valM,valF) = f valM ++ " -> " ++ f valF
 
 -- 17
--- dotise :: String -> (c -> String) -> (a -> String) -> Arbre c a -> String
--- dotise nameArb f g a
+dotise :: String -> (c -> String) -> (Char -> String) -> Arbre c Char -> String
+
+dotise "" f h Feuille = "Test chaine vide Feuille"
+
+dotise nameArb f h Feuille = "Test nameArb = " ++ nameArb ++ " Feuille"
+
+dotise "" f h (Noeud val coul g d) = "Test chaine vide Noeud"
+
+dotise nameArb f h a@(Noeud val coul g d) =unlines ["digraph \""++nameArb++"\" {","node [fontname=\"DejaVu-Sans\", shape=circle]","","/* Liste des noeuds */",map snd (aplatit a),"","/* Liste des arcs */", "map arc (arcs a)"]
