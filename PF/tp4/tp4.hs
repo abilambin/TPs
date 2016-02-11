@@ -2,7 +2,7 @@
 
 module Tp4 where
 import Test.QuickCheck
- 
+
 -- 1
 data Arbre coul val = Noeud { valeur :: val
                               , couleur :: coul
@@ -18,7 +18,7 @@ mapArbre f (Noeud val coul g d) =
  Noeud (f val) coul (mapArbre f g) (mapArbre f d)
 
 foldArbre :: (a -> b -> b -> b) -> b -> Arbre c a -> b
-foldArbre _ v Feuille = v 
+foldArbre _ v Feuille = v
 foldArbre f v (Noeud val _ g d) = f val (foldArbre f v g) (foldArbre f v d)
 
 -- 3
@@ -74,17 +74,17 @@ prop_estCompletPeigne xs = not (estComplet (peigneGauche xs))
 complet :: Int -> [(c, a)] -> Arbre c a
 complet 0 [] = Feuille
 complet 1 [(coul, val)] = Noeud val coul Feuille Feuille
-complet n xs = Noeud val coul g d 
+complet n xs = Noeud val coul g d
   where g          = complet (n-1) (take (n-1) xs)
         d          = complet (n-1) (drop n xs)
         (coul,val) = xs !! (n-1)
 
 
-complet2 = Noeud 'b' () (Noeud 'a' () Feuille Feuille) (Noeud 'c' () Feuille Feuille)
+complet2 = Noeud "b" "red" (Noeud "a" "yellow" Feuille Feuille) (Noeud "c" "blue" Feuille Feuille)
 
-complet3 = Noeud 'd' () (Noeud 'b' ()  (Noeud 'a' () Feuille Feuille) (Noeud 'c' () Feuille Feuille)) (Noeud 'f' ()  (Noeud 'e' () Feuille Feuille) (Noeud 'g' () Feuille Feuille))
+complet3 = Noeud "d" "orange" (Noeud "b" "orange"  (Noeud "a" "orange" Feuille Feuille) (Noeud "c" "orange" Feuille Feuille)) (Noeud "f" "orange"  (Noeud "e" "orange" Feuille Feuille) (Noeud "g" "orange" Feuille Feuille))
 
-complet4 = Noeud 'h' () (Noeud 'd' () (Noeud 'b' ()  (Noeud 'a' () Feuille Feuille) (Noeud 'c' () Feuille Feuille)) (Noeud 'f' ()  (Noeud 'e' () Feuille Feuille) (Noeud 'g' () Feuille Feuille))) (Noeud 'l' () (Noeud 'j' ()  (Noeud 'i' () Feuille Feuille) (Noeud 'k' () Feuille Feuille)) (Noeud 'n' ()  (Noeud 'm' () Feuille Feuille) (Noeud 'o' () Feuille Feuille)))
+complet4 = Noeud "h" "orange" (Noeud "d" "orange" (Noeud "b" "orange"  (Noeud "a" "orange" Feuille Feuille) (Noeud "c" "orange" Feuille Feuille)) (Noeud "f" "orange"  (Noeud "e" "orange" Feuille Feuille) (Noeud "g" "orange" Feuille Feuille))) (Noeud "l" "orange" (Noeud "j" "orange"  (Noeud "i" "orange" Feuille Feuille) (Noeud "k" "orange" Feuille Feuille)) (Noeud "n" "orange"  (Noeud "m" "orange" Feuille Feuille) (Noeud "o" "orange" Feuille Feuille)))
 
 
 -- 10
@@ -114,12 +114,12 @@ noeud :: (c -> String) -> (a -> String) -> (c,a) -> String
 noeud f g (c,a) = g a ++ f c
 
 coul2S coul = " [color=" ++ coul ++", fontcolor=" ++ coul ++"]"
-val2S val = val:[]
+val2S val = ""++val
 
 noeudSpec = noeud coul2S val2S
 
 -- 15
-arcs :: Arbre c a -> [(a,a)] 
+arcs :: Arbre c a -> [(a,a)]
 arcs Feuille = []
 arcs (Noeud val coul Feuille Feuille) = []
 arcs (Noeud val coul Feuille d@(Noeud vald could gd dd)) = concat [[(val,vald)], arcs d]
@@ -131,12 +131,29 @@ arc :: (a -> String) -> (a,a) -> String
 arc f (valM,valF) = f valM ++ " -> " ++ f valF
 
 -- 17
-dotise :: String -> (c -> String) -> (Char -> String) -> Arbre c Char -> String
+dotise :: String -> (c -> String) -> (a -> String) -> Arbre c a -> String
 
-dotise "" f h Feuille = "Test chaine vide Feuille"
-
-dotise nameArb f h Feuille = "Test nameArb = " ++ nameArb ++ " Feuille"
-
+{-
+dotise "" _ h Feuille = "Test chaine vide Feuille"
+dotise nameArb _ h Feuille = "Test nameArb = " ++ nameArb ++ " Feuille"
 dotise "" f h (Noeud val coul g d) = "Test chaine vide Noeud"
 
-dotise nameArb f h a@(Noeud val coul g d) =unlines ["digraph \""++nameArb++"\" {","node [fontname=\"DejaVu-Sans\", shape=circle]","","/* Liste des noeuds */",map snd (aplatit a),"","/* Liste des arcs */", "map arc (arcs a)"]
+dotise nameArb f h a@(Noeud val coul g d) = unlines ["digraph \""++nameArb++"\" {","node [fontname=\"DejaVu-Sans\", shape=circle]","","/* Liste des noeuds */",map noeudSpec (val,coul),"","/* Liste des arcs */", "map arc (arcs a)"]
+-}
+
+dotise nameArb f h a = unlines [ "digraph \""++nameArb++"\" {"
+                               , "node [fontname=\"DejaVu-Sans\", shape=circle]"
+                               , ""
+                               , "/* Liste des noeuds */"
+                               , fonction1 f h a
+                               , "/* Liste des arcs */"
+                               , fonction2 h a]
+
+fonction1 :: (c -> String) -> (a -> String) -> Arbre c a -> String
+fonction1 _ _ Feuille = ""
+fonction1 f h (Noeud val coul Feuille Feuille) =  noeud f h (coul,val)
+fonction1 f h (Noeud val coul Feuille d) = unlines [noeud f h (coul,val), fonction1 f h d]
+fonction1 f h (Noeud val coul g Feuille) = unlines [noeud f h (coul,val), fonction1 f h g]
+fonction1 f h (Noeud val coul g d) = unlines [noeud f h (coul,val), fonction1 f h g, fonction1 f h d]
+
+fonction2 h a = unlines (map (arc h) (arcs a))
