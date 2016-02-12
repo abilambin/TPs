@@ -55,34 +55,55 @@ decoupe([],[],[],[]).
 decoupe([X1|[X2|[X3|XS]]],[Y1|[Y2|[Y3|YS]]],[Z1|[Z2|[Z3|ZS]]],[[X1|[X2|[X3|[Y1|[Y2|[Y3|[Z1|[Z2|[Z3]]]]]]]]]|L]):- decoupe(XS,YS,ZS,L).
 
 % Q9
+concatene([],YS,YS).
+concatene([X|XS],YS,[X|L]) :- concatene(XS,YS,L).
+
 carres([],[]).
-carres([X1|[X2|[X3]]],L):- decoupe(X1,X2,X3,L).
-  
+carres([X1|[X2|[X3|XS]]],L3):- decoupe(X1,X2,X3,L), carres(XS,L2), concatene(L,L2,L3).
+
 % Q10
-% TODO
-solution([X|XS]) :- bonnetaille(X,9), verifie(X), solution(XS).
+solution(XS) :- bonnetaille(XS,9), verifie(XS),
+transp(XS,YS), bonnetaille(YS,9), verifie(YS),
+carres(XS,ZS), verifie(ZS).
 
+% Q11
+diagonaleg([[X|[]]|[]],[X]):- !.
+diagonaleg([[X|_]|XSS],[X|L]):- transp(XSS,[_|YSS]),diagonaleg(YSS,L).
 
+retourne([],[],[]).
+retourne([X],YS,[X|YS]).
+retourne([X|XS],YS,A) :- retourne(XS,[X|YS],A).
 
+retournetous([],[]).
+retournetous([X|XS],[Y|L]):- retourne(X,[],Y), retournetous(XS,L), !.
 
+diagonaled(XS,L):- retournetous(XS,L1), diagonaleg(L1,L).
 
+solutiondiag(XS) :- bonnetaille(XS,9), verifie(XS),
+transp(XS,YS), bonnetaille(YS,9), verifie(YS),
+carres(XS,ZS), verifie(ZS),
+diagonaleg(XS,DG), verifie([DG]),
+diagonaled(XS,DD), verifie([DD]).
 
+% Q12
 
+grille4([[2,_,_,3],
+        [_,_,2,_],
+        [_,4,1,_],
+        [1,_,_,_]]).
 
+solution4(XS) :- bonnetaille(XS,4), verifie4(XS),
+transp(XS,YS), bonnetaille(YS,4), verifie4(YS),
+carres2(XS,ZS), verifie4(ZS).
 
+verifie4([]).
+verifie4([X|XS]):- X ins 1..4, all_distinct(X), verifie4(XS).
 
+decoupe2([],[],[]).
+decoupe2([X1|[X2|XS]],[Y1|[Y2|YS]],[[X1|[X2|[Y1|[Y2]]]]|L]):- decoupe2(XS,YS,L).
 
+carres2([],[]).
+carres2([X1|[X2|XS]],L3):- decoupe2(X1,X2,L), carres2(XS,L2), concatene(L,L2,L3).
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+% Q13
+-- TODO
