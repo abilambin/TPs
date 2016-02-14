@@ -1,3 +1,5 @@
+-- Fabre Loïc - Lambin Abigaïl - TP4 (Suite)
+
 data Arbre coul val = Noeud { valeur :: val
                               , couleur :: Couleur
                               , gauche :: Arbre coul val

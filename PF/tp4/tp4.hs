@@ -132,28 +132,19 @@ arc f (valM,valF) = f valM ++ " -> " ++ f valF
 
 -- 17
 dotise :: String -> (c -> String) -> (a -> String) -> Arbre c a -> String
-
-{-
-dotise "" _ h Feuille = "Test chaine vide Feuille"
-dotise nameArb _ h Feuille = "Test nameArb = " ++ nameArb ++ " Feuille"
-dotise "" f h (Noeud val coul g d) = "Test chaine vide Noeud"
-
-dotise nameArb f h a@(Noeud val coul g d) = unlines ["digraph \""++nameArb++"\" {","node [fontname=\"DejaVu-Sans\", shape=circle]","","/* Liste des noeuds */",map noeudSpec (val,coul),"","/* Liste des arcs */", "map arc (arcs a)"]
--}
-
 dotise nameArb f h a = unlines [ "digraph \""++nameArb++"\" {"
                                , "node [fontname=\"DejaVu-Sans\", shape=circle]"
                                , ""
                                , "/* Liste des noeuds */"
-                               , fonction1 f h a
+                               , noeudValCoul f h a
                                , "/* Liste des arcs */"
-                               , fonction2 h a]
+                               , arcList h a]
 
-fonction1 :: (c -> String) -> (a -> String) -> Arbre c a -> String
-fonction1 _ _ Feuille = ""
-fonction1 f h (Noeud val coul Feuille Feuille) =  noeud f h (coul,val)
-fonction1 f h (Noeud val coul Feuille d) = unlines [noeud f h (coul,val), fonction1 f h d]
-fonction1 f h (Noeud val coul g Feuille) = unlines [noeud f h (coul,val), fonction1 f h g]
-fonction1 f h (Noeud val coul g d) = unlines [noeud f h (coul,val), fonction1 f h g, fonction1 f h d]
+noeudValCoul :: (c -> String) -> (a -> String) -> Arbre c a -> String
+noeudValCoul _ _ Feuille = ""
+noeudValCoul f h (Noeud val coul Feuille Feuille) =  noeud f h (coul,val)
+noeudValCoul f h (Noeud val coul Feuille d) = unlines [noeud f h (coul,val), noeudValCoul f h d]
+noeudValCoul f h (Noeud val coul g Feuille) = unlines [noeud f h (coul,val), noeudValCoul f h g]
+noeudValCoul f h (Noeud val coul g d) = unlines [noeud f h (coul,val), noeudValCoul f h g, noeudValCoul f h d]
 
-fonction2 h a = unlines (map (arc h) (arcs a))
+arcList h a = unlines (map (arc h) (arcs a))
