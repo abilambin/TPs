@@ -10,7 +10,6 @@ grille([[_,_,_,_,_,_,_,_,_],
         [_,_,2,_,1,_,_,_,_],
         [_,_,_,_,4,_,_,_,9]]).
 
-
 % Q1
 
 printline([]):- writeln('|').
@@ -66,7 +65,18 @@ solution(XS) :- bonnetaille(XS,9), verifie(XS),
 transp(XS,YS), bonnetaille(YS,9), verifie(YS),
 carres(XS,ZS), verifie(ZS).
 
+
 % Q11
+grilleCross([[1,7,_,5,9,_,_,_,4],
+             [_,2,_,_,7,_,_,9,_],
+             [9,_,3,_,4,_,8,_,_],
+             [_,_,_,4,2,7,_,_,_],
+             [2,3,4,1,5,9,6,7,8],
+             [_,_,_,3,8,6,_,_,_],
+             [_,_,2,_,6,_,7,1,_],
+             [_,1,_,_,3,_,_,8,_],
+             [6,_,_,2,1,_,_,_,9]]).
+
 diagonaleg([[X|[]]|[]],[X]):- !.
 diagonaleg([[X|_]|XSS],[X|L]):- transp(XSS,[_|YSS]),diagonaleg(YSS,L).
 
@@ -85,8 +95,11 @@ carres(XS,ZS), verifie(ZS),
 diagonaleg(XS,DG), verifie([DG]),
 diagonaled(XS,DD), verifie([DD]).
 
-% Q12
+% Pour tester
+% grilleCross(L), solutiondiag(L), print(L).
 
+
+% Q12
 grille4([[2,_,_,3],
         [_,_,2,_],
         [_,4,1,_],
@@ -105,5 +118,6 @@ decoupe2([X1|[X2|XS]],[Y1|[Y2|YS]],[[X1|[X2|[Y1|[Y2]]]]|L]):- decoupe2(XS,YS,L).
 carres2([],[]).
 carres2([X1|[X2|XS]],L3):- decoupe2(X1,X2,L), carres2(XS,L2), concatene(L,L2,L3).
 
+
 % Q13
--- TODO
+% TODO
