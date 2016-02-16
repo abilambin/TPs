@@ -120,4 +120,38 @@ carres2([X1|[X2|XS]],L3):- decoupe2(X1,X2,L), carres2(XS,L2), concatene(L,L2,L3)
 
 
 % Q13
-% TODO
+grillehex([[b,2,_,7,_,_,_,f,6,e,_,_,_,3,_,d],
+           [_,_,_,9,b,_,2,_,_,_,_,_,f,1,_,6],
+           [_,a,_,c,_,_,7,_,4,_,8,_,_,_,e,_],
+           [_,8,_,3,_,_,1,_,_,_,f,c,a,_,4,2],
+           [_,_,e,_,_,_,_,_,1,6,a,_,_,_,3,_],
+           [3,_,_,_,_,_,_,_,_,4,_,f,8,_,6,b],
+           [_,_,_,d,2,_,_,_,_,b,_,_,7,4,_,_],
+           [_,b,8,4,0,_,_,d,7,_,9,3,e,_,_,_],
+           [_,_,_,f,3,7,_,4,5,_,_,9,0,d,c,_],
+           [_,_,c,8,_,_,a,_,_,_,_,b,4,_,_,_],
+           [4,9,_,5,e,_,d,_,_,_,_,_,_,_,_,a],
+           [_,d,_,_,_,6,c,1,_,_,_,_,_,7,_,_],
+           [9,1,_,e,7,4,_,_,_,f,_,_,3,_,d,_],
+           [_,3,_,_,_,9,_,2,_,1,_,_,5,_,0,_],
+           [f,_,4,b,_,_,_,_,_,3,_,d,1,_,_,_],
+           [5,_,d,_,_,_,f,e,9,_,_,_,2,_,b,4]]).
+
+solutionhex(XS) :- bonnetaille(XS,16), verifiehex(XS),
+transp(XS,YS), bonnetaille(YS,16), verifiehex(YS),
+carreshex(XS,ZS), verifiehex(ZS).
+
+valHex2([0,1,2,3,4,5,6,7,8,9,a,b,c,d,e,f]).
+domainTest(_) :- 0..9.
+
+% format('~0t~16R~2|', [16]).
+
+
+verifiehex([]).
+verifiehex([X|XS]):- number_codes(N,S), number_to_chars(X,S1), append("0x",S1,S), N in 0..15, verifiehex(XS).
+
+decoupe4([],[],[],[],[]).
+decoupe4([X1|[X2|[X3|[X4|XS]]]],[Y1|[Y2|[Y3|[Y4|YS]]]],[Z1|[Z2|[Z3|[Z4|ZS]]]],[V1|[V2|[V3|[V4|VS]]]],[[X1|[X2|[X3|[X4|[Y1|[Y2|[Y3|[Y4|[Z1|[Z2|[Z3|[Z4|[V1|[V2|[V3|[V4]]]]]]]]]]]]]]]]|L]):- decoupe4(XS,YS,ZS,VS,L).
+
+carres4([],[]).
+carres4([X1|[X2|[X3|[X4|XS]]]],L3):- decoupe4(X1,X2,X3,X4,L), carres4(XS,L2), concatene(L,L2,L3).
