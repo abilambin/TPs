@@ -137,18 +137,51 @@ grillehex([[b,2,_,7,_,_,_,f,6,e,_,_,_,3,_,d],
            [f,_,4,b,_,_,_,_,_,3,_,d,1,_,_,_],
            [5,_,d,_,_,_,f,e,9,_,_,_,2,_,b,4]]).
 
+% Pour tester : grillehex(L), solutionhex(L), printhex(L).
+
+
 solutionhex(XS) :- bonnetaille(XS,16), verifiehex(XS),
 transp(XS,YS), bonnetaille(YS,16), verifiehex(YS),
-carreshex(XS,ZS), verifiehex(ZS).
+carres4(XS,ZS), verifiehex(ZS).
 
-valHex2([0,1,2,3,4,5,6,7,8,9,a,b,c,d,e,f]).
-domainTest(_) :- 0..9.
+valHex([0,1,2,3,4,5,6,7,8,9,a,b,c,d,e,f]).
 
-% format('~0t~16R~2|', [16]).
 
+isInValHex(V) :- valHex(XS), member(V,XS), !.
+isInValHexTous([]).
+isInValHexTous([X|XS]) :- isInValHex(X), isInValHexTous(XS), !.
+
+
+all_distinct_P([],_).
+all_distinct_P([X|XS],[]) :- all_distinct_P(XS,[X]), !.
+all_distinct_P([X|XS],L) :- not(member(X,L)), all_distinct_P(XS,[X|L]), !.
+
+printlinehex([]):- writeln('|').
+printlinehex([X|XS]):- integer(X), write('|'), write(X), printlinehex(XS),!.
+printlinehex([X|XS]):- atom(X), write('|'), write(X), printlinehex(XS),!.
+printlinehex([_|XS]):- write('|'), write(' '), printlinehex(XS).
+
+printhex([]).
+printhex([X|XS]):- printlinehex(X), printhex(XS).
+
+/*
+?- grillehex(L), bonnetaille(L,16).
+L = [[b, 2, _G8438, 7, _G8444, _G8447, _G8450, f|...], [_G8483, _G8486, _G8489, 9, b, _G8498, 2|...], [_G8534, a, _G8540, c, _G8546, _G8549|...], [_G8585, 8, _G8591, 3, _G8597|...], [_G8636, _G8639, e, _G8645|...], [3, _G8690, _G8693|...], [_G8738, _G8741|...], [_G8789|...], [...|...]|...].
+
+?- grillehex(L), bonnetaille(L,16), verifiehex(L).
+false.
+
+..
+
+?- verifiehex([[b,2,0,7,9,8,c,f,6,e,5,4,1,3,a,d]]).
+true.
+
+?- verifiehex([[b,2,_,7,_,_,_,f,6,e,_,_,_,3,_,d]]).
+false.
+*/
 
 verifiehex([]).
-verifiehex([X|XS]):- number_codes(N,S), number_to_chars(X,S1), append("0x",S1,S), N in 0..15, verifiehex(XS).
+verifiehex([X|XS]):- isInValHexTous(X), all_distinct_P(X,[]), verifiehex(XS).
 
 decoupe4([],[],[],[],[]).
 decoupe4([X1|[X2|[X3|[X4|XS]]]],[Y1|[Y2|[Y3|[Y4|YS]]]],[Z1|[Z2|[Z3|[Z4|ZS]]]],[V1|[V2|[V3|[V4|VS]]]],[[X1|[X2|[X3|[X4|[Y1|[Y2|[Y3|[Y4|[Z1|[Z2|[Z3|[Z4|[V1|[V2|[V3|[V4]]]]]]]]]]]]]]]]|L]):- decoupe4(XS,YS,ZS,VS,L).
