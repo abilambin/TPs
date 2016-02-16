@@ -158,7 +158,7 @@ all_distinct_P([X|XS],L) :- not(member(X,L)), all_distinct_P(XS,[X|L]), !.
 
 printlinehex([]):- writeln('|').
 printlinehex([X|XS]):- integer(X), write('|'), write(X), printlinehex(XS),!.
-printlinehex([X|XS]):- atom(X), write('|'), write(X), printlinehex(XS),!.
+printlinehex([X|XS]):- atom(X), isInValHex(X), write('|'), write(X), printlinehex(XS),!.
 printlinehex([_|XS]):- write('|'), write(' '), printlinehex(XS).
 
 printhex([]).
@@ -177,6 +177,17 @@ false.
 true.
 
 ?- verifiehex([[b,2,_,7,_,_,_,f,6,e,_,_,_,3,_,d]]).
+false.
+
+Le problème provient surement de all_distinct_P : (dès qu'il y a un _ il renvoi false)
+
+?- all_distinct_P([b,2,0,7,9,8,c,f,6,e,5,4,1,3,a,_],[]).
+false.
+
+?- all_distinct_P([b,2,0,7,9,8,c,f,6,e,5,4,1,3,a,k],[]).
+true.
+
+?- all_distinct_P([b,2,0,7,9,8,c,f,6,_,_,4,1,3,a,_],[]).
 false.
 */
 
