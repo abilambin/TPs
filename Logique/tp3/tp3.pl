@@ -153,6 +153,7 @@ isInValHexTous([X|XS]) :- isInValHex(X), isInValHexTous(XS), !.
 
 
 all_distinct_P([],_).
+all_distinct_P(['_'|XS],YS):- all_distinct_P(XS,YS), !.
 all_distinct_P([X|XS],[]) :- all_distinct_P(XS,[X]), !.
 all_distinct_P([X|XS],L) :- not(member(X,L)), all_distinct_P(XS,[X|L]), !.
 
@@ -164,32 +165,6 @@ printlinehex([_|XS]):- write('|'), write(' '), printlinehex(XS).
 printhex([]).
 printhex([X|XS]):- printlinehex(X), printhex(XS).
 
-/*
-?- grillehex(L), bonnetaille(L,16).
-L = [[b, 2, _G8438, 7, _G8444, _G8447, _G8450, f|...], [_G8483, _G8486, _G8489, 9, b, _G8498, 2|...], [_G8534, a, _G8540, c, _G8546, _G8549|...], [_G8585, 8, _G8591, 3, _G8597|...], [_G8636, _G8639, e, _G8645|...], [3, _G8690, _G8693|...], [_G8738, _G8741|...], [_G8789|...], [...|...]|...].
-
-?- grillehex(L), bonnetaille(L,16), verifiehex(L).
-false.
-
-..
-
-?- verifiehex([[b,2,0,7,9,8,c,f,6,e,5,4,1,3,a,d]]).
-true.
-
-?- verifiehex([[b,2,_,7,_,_,_,f,6,e,_,_,_,3,_,d]]).
-false.
-
-Le problème provient surement de all_distinct_P : (dès qu'il y a un _ il renvoi false)
-
-?- all_distinct_P([b,2,0,7,9,8,c,f,6,e,5,4,1,3,a,_],[]).
-false.
-
-?- all_distinct_P([b,2,0,7,9,8,c,f,6,e,5,4,1,3,a,k],[]).
-true.
-
-?- all_distinct_P([b,2,0,7,9,8,c,f,6,_,_,4,1,3,a,_],[]).
-false.
-*/
 
 verifiehex([]).
 verifiehex([X|XS]):- isInValHexTous(X), all_distinct_P(X,[]), verifiehex(XS).
