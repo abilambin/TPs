@@ -119,6 +119,7 @@ carres2([],[]).
 carres2([X1|[X2|XS]],L3):- decoupe2(X1,X2,L), carres2(XS,L2), concatene(L,L2,L3).
 
 
+
 % Q13
 grillehex([[b,2,_,7,_,_,_,f,6,e,_,_,_,3,_,d],
            [_,_,_,9,b,_,2,_,_,_,_,_,f,1,_,6],
@@ -137,25 +138,36 @@ grillehex([[b,2,_,7,_,_,_,f,6,e,_,_,_,3,_,d],
            [f,_,4,b,_,_,_,_,_,3,_,d,1,_,_,_],
            [5,_,d,_,_,_,f,e,9,_,_,_,2,_,b,4]]).
 
-% Pour tester : grillehex(L), solutionhex(L), printhex(L).
+% Pour tester : grillehex(L), transfalltodec(L,L1), solutionhex(L1), transfalltohex(L1,L2), printhex(L2).
 
 
 solutionhex(XS) :- bonnetaille(XS,16), verifiehex(XS),
 transp(XS,YS), bonnetaille(YS,16), verifiehex(YS),
 carres4(XS,ZS), verifiehex(ZS).
 
-valHex([0,1,2,3,4,5,6,7,8,9,a,b,c,d,e,f]).
 
+transftodec(a,0xa).
+transftodec(b,0xb).
+transftodec(c,0xc).
+transftodec(d,0xd).
+transftodec(e,0xe).
+transftodec(f,0xf).
+
+transftohex(10,a):- !.
+transftohex(11,b):- !.
+transftohex(12,c):- !.
+transftohex(13,d):- !.
+transftohex(14,e):- !.
+transftohex(15,f):- !.
+transftohex(X,X):- !.
+
+
+valHex([0,1,2,3,4,5,6,7,8,9,a,b,c,d,e,f]).
 
 isInValHex(V) :- valHex(XS), member(V,XS), !.
 isInValHexTous([]).
 isInValHexTous([X|XS]) :- isInValHex(X), isInValHexTous(XS), !.
 
-
-all_distinct_P([],_).
-all_distinct_P(['_'|XS],YS):- all_distinct_P(XS,YS), !.
-all_distinct_P([X|XS],[]) :- all_distinct_P(XS,[X]), !.
-all_distinct_P([X|XS],L) :- not(member(X,L)), all_distinct_P(XS,[X|L]), !.
 
 printlinehex([]):- writeln('|').
 printlinehex([X|XS]):- integer(X), write('|'), write(X), printlinehex(XS),!.
@@ -165,9 +177,25 @@ printlinehex([_|XS]):- write('|'), write(' '), printlinehex(XS).
 printhex([]).
 printhex([X|XS]):- printlinehex(X), printhex(XS).
 
+ 
+
+transflignetodec([],[]).
+transflignetodec([X|XS],[X1|L]):- atom(X), isInValHex(X), transftodec(X,X1), transflignetodec(XS,L), !.
+transflignetodec([X|XS],[X|L]):- transflignetodec(XS,L), !.
+
+transfalltodec([],[]).
+transfalltodec([X|XS],[X1|L]) :- transflignetodec(X,X1), transfalltodec(XS,L), !.
+
+
+transflignetohex([],[]).
+transflignetohex([X|XS],[X1|L]) :- transftohex(X,X1), transflignetohex(XS,L), !.
+
+transfalltohex([],[]).
+transfalltohex([X|XS],[X1|L]) :- transflignetohex(X,X1), transfalltohex(XS,L), !.
+
 
 verifiehex([]).
-verifiehex([X|XS]):- isInValHexTous(X), all_distinct_P(X,[]), verifiehex(XS).
+verifiehex([X|XS]):- X ins 0..15, all_distinct(X), verifiehex(XS).
 
 decoupe4([],[],[],[],[]).
 decoupe4([X1|[X2|[X3|[X4|XS]]]],[Y1|[Y2|[Y3|[Y4|YS]]]],[Z1|[Z2|[Z3|[Z4|ZS]]]],[V1|[V2|[V3|[V4|VS]]]],[[X1|[X2|[X3|[X4|[Y1|[Y2|[Y3|[Y4|[Z1|[Z2|[Z3|[Z4|[V1|[V2|[V3|[V4]]]]]]]]]]]]]]]]|L]):- decoupe4(XS,YS,ZS,VS,L).
