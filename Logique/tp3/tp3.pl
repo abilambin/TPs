@@ -138,12 +138,43 @@ grillehex([[b,2,_,7,_,_,_,f,6,e,_,_,_,3,_,d],
            [f,_,4,b,_,_,_,_,_,3,_,d,1,_,_,_],
            [5,_,d,_,_,_,f,e,9,_,_,_,2,_,b,4]]).
 
-% Pour tester : grillehex(L), transfalltodec(L,L1), solutionhex(L1), transfalltohex(L1,L2), printhex(L2).
+grillehexV([[_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_],
+            [_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_],
+            [_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_],
+            [_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_],
+            [_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_],
+            [_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_],
+            [_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_],
+            [_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_],
+            [_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_],
+            [_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_],
+            [_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_],
+            [_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_],
+            [_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_],
+            [_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_],
+            [_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_],
+            [_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_]]).
 
+% Pour tester : grillehex(L), transfalltodec(L,L1), solutionhex(L1), transfalltohex(L1,L2), printhex(L2).
 
 solutionhex(XS) :- bonnetaille(XS,16), verifiehex(XS),
 transp(XS,YS), bonnetaille(YS,16), verifiehex(YS),
 carres4(XS,ZS), verifiehex(ZS).
+
+
+% Pour tester2 : grillehex(L), solutionhex2(L), transfalltohex(L,L1) , printhex(L1).
+
+solutionhex2(XS) :-  transfalltodec(XS,L1), bonnetaille(L1,16), verifiehex(L1),
+transp(L1,YS), bonnetaille(YS,16), verifiehex(YS),
+carres4(L1,ZS), verifiehex(ZS).
+
+
+
+% Pour tester3 : grillehex(L), solutionhex3(L,L1) , printhex(L1).
+
+solutionhex3(XS,R) :-  transfalltodec(XS,L1), bonnetaille(L1,16), verifiehex(L1),
+transp(L1,YS), bonnetaille(YS,16), verifiehex(YS),
+carres4(L1,ZS), verifiehex(ZS), transfalltohex(XS,R).
 
 
 transftodec(a,0xa).
