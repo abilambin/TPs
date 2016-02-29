@@ -1,15 +1,8 @@
 -- Fabre Loïc - Lambin Abigaïl - TP4 (Suite)
 
 module Tp4_2 where
-import Test.QuickCheck
-
-hauteur :: Arbre c a -> Int
-hauteur Feuille  = 0
-hauteur (Noeud _ _ g d) = 1 + max (hauteur g) (hauteur d)
-
-taille :: Arbre c a -> Int
-taille Feuille  = 0
-taille (Noeud _ _ g d) = 1 + taille g + taille d
+import Test.QuickCheck 
+import Data.Char
 
 data Arbre coul val = Noeud { valeur :: val
                               , couleur :: Couleur
@@ -17,6 +10,46 @@ data Arbre coul val = Noeud { valeur :: val
                               , droit  :: Arbre coul val }
                     | Feuille
                       deriving Show
+-- 14
+noeud :: (Couleur -> String) -> (a -> String) -> (Couleur,a) -> String
+noeud f g (c,a) = g a ++ f c
+
+coul2S N = " [color= black, fontcolor=black]"
+coul2S _ = " [color=red, fontcolor=red]"
+val2S val = (intToDigit val):[]
+
+noeudSpec = noeud coul2S val2S
+
+-- 15
+arcs :: Arbre c a -> [(a,a)]
+arcs Feuille = []
+arcs (Noeud val coul Feuille Feuille) = []
+arcs (Noeud val coul Feuille d@(Noeud vald could gd dd)) = concat [[(val,vald)], arcs d]
+arcs (Noeud val coul g@(Noeud valg coulg gg dg) Feuille) = concat [[(val,valg)], arcs g]
+arcs (Noeud val coul g@(Noeud valg coulg gg dg) d@(Noeud vald could gd dd)) = concat [[(val,valg)], [(val,vald)], arcs g, arcs d]
+
+-- 16
+arc :: (a -> String) -> (a,a) -> String
+arc f (valM,valF) = f valM ++ " -> " ++ f valF                        
+
+-- 17
+dotise :: String -> (Couleur -> String) -> (a -> String) -> Arbre Couleur a -> String
+dotise nameArb f h a = unlines [ "digraph \""++nameArb++"\" {"
+                               , "node [fontname=\"DejaVu-Sans\", shape=circle]"
+                               , ""
+                               , "/* Liste des noeuds */"
+                               , noeudValCoul f h a
+                               , "/* Liste des arcs */"
+                               , arcList h a]
+                       
+noeudValCoul :: (Couleur -> String) -> (a -> String) -> Arbre Couleur a -> String
+noeudValCoul _ _ Feuille = ""
+noeudValCoul f h (Noeud val co Feuille Feuille) =  noeud f h (co,val)
+noeudValCoul f h (Noeud val coul Feuille d) = unlines [noeud f h (coul,val), noeudValCoul f h d]
+noeudValCoul f h (Noeud val coul g Feuille) = unlines [noeud f h (coul,val), noeudValCoul f h g]
+noeudValCoul f h (Noeud val coul g d) = unlines [noeud f h (coul,val), noeudValCoul f h g, noeudValCoul f h d]
+
+arcList h a = unlines (map (arc h) (arcs a))
 
 -- 18
 elementR ::(Eq a, Ord a) => a -> Arbre c a-> Bool
@@ -30,12 +63,12 @@ data Couleur = N | R
                       deriving Show
 -- 20
 equilibre :: Arbre c a -> Arbre c a
-equilibre Feuille = Feuille
-equilibre (Noeud val coul Feuille Feuille) = Noeud val coul Feuille Feuille
-equilibre (Noeud val N (Noeud val2 R (Noeud val3 R ggg ggd) gd) d) = Noeud val2 R (Noeud val3 N ggg ggd) (Noeud val N gd d)
-equilibre (Noeud val N (Noeud val2 R gg (Noeud val3 R gdg gdd)) d) = Noeud val3 R (Noeud val2 N gg gdg) (Noeud val N gdd d)
-equilibre (Noeud val N g (Noeud val2 R (Noeud val3 R dgg dgd) dd)) = Noeud val3 R (Noeud val N g dgg) (Noeud val2 N dgd dd)
-equilibre (Noeud val N g (Noeud val2 R dg (Noeud val3 R ddg ddd))) = Noeud val2 R (Noeud val N g dg) (Noeud val3 N ddg ddd)
+equilibre (Noeud z N (Noeud y R (Noeud x R a b) c) d) = Noeud y R (Noeud x N a b) (Noeud z N c d)
+equilibre (Noeud z N (Noeud x R a (Noeud y R b c)) d) = Noeud y R (Noeud x N a b) (Noeud z N c d)
+equilibre (Noeud x N a (Noeud z R (Noeud y R b c) d)) = Noeud y R (Noeud x N a b) (Noeud z N c d)
+equilibre (Noeud x N a (Noeud y R b (Noeud z R c d))) = Noeud y R (Noeud x N a b) (Noeud z N c d)
+equilibre (Noeud val coul g d) = Noeud val coul (equilibre g) (equilibre d)
+equilibre _ = Feuille
 
 arbA = Noeud 'A' N Feuille Feuille
 arbB = Noeud 'B' N Feuille Feuille
