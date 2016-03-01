@@ -1,6 +1,6 @@
--- Fabre Loïc - Lambin Abigaïl - TP4 (Suite)
+-- Fabre Loïc - Lambin Abigaïl - TP4 (Suite) Noir-Rouge
 
-module Tp4_2 where
+module Tp4NR where
 import Test.QuickCheck 
 import Data.Char
 import Control.Concurrent (threadDelay)
@@ -18,7 +18,7 @@ noeud f g (c,a) = g a ++ f c
 coul2S N = " [color= black, fontcolor=black]"
 coul2S R = " [color=red, fontcolor=red]"
 valInt2S val = (intToDigit val):[]
-val2S val = ""++val
+val2S val = val:[]
 
 noeudSpec = noeud coul2S val2S
 
@@ -65,6 +65,12 @@ elementR e (Noeud val coul g d) | e == val  = True
 data Couleur = N | R
                       deriving Show
 -- 20
+racineNoire :: Arbre Couleur a -> Arbre Couleur a
+racineNoire (Noeud a _ ag ad) = Noeud a N ag ad
+racineNoire Feuille = Feuille
+
+equilibre' arbre = racineNoire (equilibre arbre)
+
 equilibre :: Arbre c a -> Arbre c a
 equilibre (Noeud z N (Noeud y R (Noeud x R a b) c) d) = Noeud y R (Noeud x N a b) (Noeud z N c d)
 equilibre (Noeud z N (Noeud x R a (Noeud y R b c)) d) = Noeud y R (Noeud x N a b) (Noeud z N c d)
@@ -84,23 +90,27 @@ arbTestEqui3 = Noeud 'x' N arbA (Noeud 'z' R (Noeud 'y' R arbB arbC) arbD)
 arbTestEqui4 = Noeud 'x' N arbA (Noeud 'y' R arbB (Noeud 'z' R arbC arbD ))
 
 -- 21
-insertion ::(Eq a, Ord a) =>  a -> Arbre c a -> Arbre c a
+insertionEq :: Ord a => a -> Arbre Couleur a -> Arbre Couleur a
+insertionEq val arbre = equilibre' (insertion val arbre)
+
+insertion ::(Eq a, Ord a) =>  a -> Arbre Couleur a -> Arbre Couleur a
 insertion v a | elementR v a = a
-insertion v Feuille = Noeud v N Feuille Feuille
-insertion v (Noeud val coul g d) | v < val = equilibre (Noeud val coul (insertion v g) d)
-                                 | otherwise = equilibre (Noeud val coul g (insertion v d))
+insertion v Feuille = Noeud v R Feuille Feuille
+insertion v (Noeud val coul g d) | v < val = Noeud val coul (insertion v g) d
+                                 | otherwise = Noeud val coul g (insertion v d)
                                                
 arbTestI = Noeud 2 N Feuille Feuille
 
 
 -- 23
+
 arbresDot :: String -> [String]
 arbresDot xs = arbresDot' xs Feuille
 
 arbresDot' :: [Char] -> Arbre Couleur Char -> [String]
 arbresDot' [] _ = []
-arbresDot' (x:xs)  arbre = (dotise "arbre" coul2S (\v-> [v]) newArbre) : (arbresDot' xs newArbre)
-        where newArbre = insertion x arbre
+arbresDot' (x:xs)  arbre = (dotise "arbre" coul2S val2S newArbre) : (arbresDot' xs newArbre)
+        where newArbre = insertionEq x arbre
 
 main = mapM_ ecrit arbres
     where ecrit a = do writeFile "arbre.dot" a
