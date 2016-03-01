@@ -3,6 +3,7 @@
 module Tp4_2 where
 import Test.QuickCheck 
 import Data.Char
+import Control.Concurrent (threadDelay)
 
 data Arbre coul val = Noeud { valeur :: val
                               , couleur :: Couleur
@@ -15,8 +16,9 @@ noeud :: (Couleur -> String) -> (a -> String) -> (Couleur,a) -> String
 noeud f g (c,a) = g a ++ f c
 
 coul2S N = " [color= black, fontcolor=black]"
-coul2S _ = " [color=red, fontcolor=red]"
-val2S val = (intToDigit val):[]
+coul2S R = " [color=red, fontcolor=red]"
+valInt2S val = (intToDigit val):[]
+val2S val = ""++val
 
 noeudSpec = noeud coul2S val2S
 
@@ -40,7 +42,8 @@ dotise nameArb f h a = unlines [ "digraph \""++nameArb++"\" {"
                                , "/* Liste des noeuds */"
                                , noeudValCoul f h a
                                , "/* Liste des arcs */"
-                               , arcList h a]
+                               , arcList h a
+                               , "}"]
                        
 noeudValCoul :: (Couleur -> String) -> (a -> String) -> Arbre Couleur a -> String
 noeudValCoul _ _ Feuille = ""
@@ -83,8 +86,23 @@ arbTestEqui4 = Noeud 'x' N arbA (Noeud 'y' R arbB (Noeud 'z' R arbC arbD ))
 -- 21
 insertion ::(Eq a, Ord a) =>  a -> Arbre c a -> Arbre c a
 insertion v a | elementR v a = a
-insertion v Feuille = Noeud v R Feuille Feuille
+insertion v Feuille = Noeud v N Feuille Feuille
 insertion v (Noeud val coul g d) | v < val = equilibre (Noeud val coul (insertion v g) d)
                                  | otherwise = equilibre (Noeud val coul g (insertion v d))
                                                
 arbTestI = Noeud 2 N Feuille Feuille
+
+
+-- 23
+arbresDot :: String -> [String]
+arbresDot xs = arbresDot' xs Feuille
+
+arbresDot' :: [Char] -> Arbre Couleur Char -> [String]
+arbresDot' [] _ = []
+arbresDot' (x:xs)  arbre = (dotise "arbre" coul2S (\v-> [v]) newArbre) : (arbresDot' xs newArbre)
+        where newArbre = insertion x arbre
+
+main = mapM_ ecrit arbres
+    where ecrit a = do writeFile "arbre.dot" a
+                       threadDelay 1000000
+          arbres  = arbresDot "gcfxieqzrujlmdoywnbakhpvst"

@@ -138,7 +138,8 @@ dotise nameArb f h a = unlines [ "digraph \""++nameArb++"\" {"
                                , "/* Liste des noeuds */"
                                , noeudValCoul f h a
                                , "/* Liste des arcs */"
-                               , arcList h a]
+                               , arcList h a
+                               , "}"]
 
 noeudValCoul :: (c -> String) -> (a -> String) -> Arbre c a -> String
 noeudValCoul _ _ Feuille = ""
