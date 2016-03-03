@@ -32,7 +32,7 @@ nomP = do cs <- unOuPlus lettreMin
 -- 3
 varP :: Parser Expression
 varP = do cs <- unOuPlus lettreMin
-          _ <- espacesP
+          espacesP
           return (Var cs)
 
 -- 4
@@ -42,8 +42,8 @@ applique (e1:e2:es) = applique ((App e1 e2):es)
 
 -- 5
 exprP :: Parser Expression
-exprP = varP
-
+exprP =  do exprParentheseeP ||| lambdaP ||| varP
+            
 exprsP :: Parser Expression
 exprsP = do exp <- unOuPlus exprP
             return (applique exp)
@@ -55,11 +55,33 @@ lambdaP = do car '\\'
              x <- nomP
              espacesP
              chaine "->"
-             _ <- espacesP
+             espacesP
              exp <- exprsP
              return (Lam x exp)
 
 
+-- 8
+exprParentheseeP :: Parser Expression
+exprParentheseeP = do car '('
+                      espacesP
+                      exp <- exprsP
+                      espacesP
+                      car ')'
+                      espacesP
+                      return exp
 
+-- 9
+nombreP :: Parser Expression
+nombreP = do exp <- unOuPlus nombre
+             espacesP
+             return (Lit (Entier (read exp)))
+
+nombre :: Parser Char
+nombre = (carCond (`elem` ['0'..'9']))
+
+-- 10
+booleenP :: String
+booleanP = do exp <- chaine "True"
+              return exp
 
 --f
