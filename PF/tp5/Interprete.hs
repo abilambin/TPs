@@ -42,7 +42,7 @@ applique (e1:e2:es) = applique ((App e1 e2):es)
 
 -- 5
 exprP :: Parser Expression
-exprP =  do exprParentheseeP ||| lambdaP ||| varP
+exprP =  do exprParentheseeP ||| lambdaP ||| varP ||| nombreP ||| booleenP
             
 exprsP :: Parser Expression
 exprsP = do exp <- unOuPlus exprP
@@ -80,8 +80,23 @@ nombre :: Parser Char
 nombre = (carCond (`elem` ['0'..'9']))
 
 -- 10
-booleenP :: String
-booleanP = do exp <- chaine "True"
-              return exp
+boolP:: Parser Bool
+boolP = (chaine "True" >>= \_ -> return True) ||| (chaine "False" >>= \_ -> return False)
 
---f
+booleenP :: Parser Expression
+booleenP = do exp <- boolP
+              espacesP
+              return (Lit (Bool exp))
+
+
+-- 11
+expressionP :: Parser Expression
+expressionP = exprP
+
+
+-- 12 TO DO
+-- ras :: String -> Expression
+-- ras 
+  
+  
+  --f
