@@ -59,8 +59,8 @@ Qed.
 Lemma exo5 (P Q : Prop) : ( ~ Q -> ~ P) -> (P -> Q).
 intros nqnp p.
 apply bottom_c.
-intro nq.
-intros f.
+intros nq.
+apply nqnp.
 
 
 Lemma exo6 (P : Prop) : ~ ~ P -> P.
