@@ -13,7 +13,12 @@ data Expression = Lam Nom Expression
 
 data Litteral = Entier Integer
               | Bool   Bool
-              deriving (Show,Eq)
+              deriving (Eq)
+
+instance Show Litteral where
+    show (Entier a) = show a
+    show (Bool a)   = show a
+
 
 -- 1
 espacesP :: Parser ()
@@ -43,7 +48,7 @@ applique (e1:e2:es) = applique ((App e1 e2):es)
 -- 5
 exprP :: Parser Expression
 exprP =  do exprParentheseeP ||| lambdaP ||| varP ||| nombreP ||| booleenP
-            
+
 exprsP :: Parser Expression
 exprsP = do exp <- unOuPlus exprP
             return (applique exp)
