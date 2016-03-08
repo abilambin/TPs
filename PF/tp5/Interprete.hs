@@ -84,19 +84,20 @@ boolP:: Parser Bool
 boolP = (chaine "True" >>= \_ -> return True) ||| (chaine "False" >>= \_ -> return False)
 
 booleenP :: Parser Expression
-booleenP = do exp <- boolP
+booleenP = do expr <- boolP
               espacesP
-              return (Lit (Bool exp))
+              return (Lit (Bool expr))
 
 
 -- 11
 expressionP :: Parser Expression
-expressionP = exprP
+expressionP = do espacesP
+                 exprsP
 
 
--- 12 TO DO
--- ras :: String -> Expression
--- ras 
-  
-  
-  --f
+-- 12
+ras :: String -> Expression
+ras s = case result of
+        Just (r, "") -> r
+        _ -> error "Erreur d’analyse syntaxique"
+        where result = runParser expressionP s
