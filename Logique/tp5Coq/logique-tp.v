@@ -59,27 +59,53 @@ Qed.
 Lemma exo5 (P Q : Prop) : ( ~ Q -> ~ P) -> (P -> Q).
 intros nqnp p.
 apply bottom_c.
-intros nq.
-apply nqnp.
-
+intro nq.
+destruct nqnp.
+exact nq.
+exact p.
+Qed.
 
 Lemma exo6 (P : Prop) : ~ ~ P -> P.
-Abort.
+intro nnp.
+apply bottom_c.
+intro np.
+destruct nnp.
+exact np.
+Qed.
 
 Lemma exo7 (P : Prop) : P -> ~ ~ P.
-Abort.
+intro p.
+intro np.
+apply np.
+exact p.
+Qed.
 
 Lemma exo8 (P Q R : Prop) : (P -> (Q -> R)) -> (P /\ Q -> R).
-Abort.
+intros pqr pOq.
+apply pqr.
+apply pOq.
+apply pOq.
+Qed.
 
 Lemma exo9 (P Q R : Prop) : (P /\ Q -> R) -> (P -> (Q -> R)).
-Abort.
+intros pqr p q.
+apply pqr.
+split.
+apply p.
+exact q.
+Qed.
 
 Lemma exo10 (P : Prop) : P /\ ~ P -> False.
-Abort.
+intro pEnp.
+destruct pEnp.
+destruct H0.
+exact H.
+Qed.
 
 Lemma exo11 (P : Prop) : False -> P /\ ~ P.
-Abort.
+intro f.
+destruct f.
+Qed.
 
 (* partie 2.2 *)
 
@@ -98,6 +124,7 @@ Lemma exemple134 (A B C : Prop) : (A /\ B -> C) <-> (A -> B -> C).
 Abort.
 
 Lemma exemple135 (A B C : Prop) : (C -> A) \/ (C -> B) -> (C -> A \/ B).
+intros caOcb c.
 Abort.
 
 Lemma exemple_136 (X : Type) (A B : X -> Prop) :
