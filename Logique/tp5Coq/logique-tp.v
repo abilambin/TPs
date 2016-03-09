@@ -108,35 +108,130 @@ destruct f.
 Qed.
 
 (* partie 2.2 *)
+Lemma or_elim ( A B C : Prop ) :
+( A -> C ) -> ( B -> C ) -> A \/ B -> C .
+intros ac bc aOb.
+destruct aOb as [ a | b ].
+apply ac .
+exact a .
+apply bc .
+exact b .
+Qed .
+
 
 Lemma exo12 (P Q : Prop) : P \/ Q <-> ~ ( ~ P /\ ~ Q).
+split.
+intro pOq.
+intro npEnq.
+destruct pOq.
+destruct npEnq.
+apply H0.
+apply H.
+destruct npEnq.
+apply H1.
+apply H.
+
+intro NnpEnq.
+apply bottom_c.
+intro Npoq.
+destruct NnpEnq.
+apply and_not_or.
+split.
+destruct Npoq.
+
+apply np.
+intro q.
 Abort.
 
 Lemma exo13 (P : Prop) : ~ P <-> (P -> False).
-Abort.
+split.
+intros np p.
+destruct np.
+apply p.
+
+intro pf.
+intro p.
+apply exo11.
+apply pf.
+apply p.
+Qed.
 
 Lemma exo14 (P Q : Prop) : (P <-> Q) <-> (P -> Q) /\ (Q -> P).
-Abort.
+split.
+intro pEQq.
+split.
+destruct pEQq as [pIMq qIMp].
+apply pIMq.
+destruct pEQq as [pIMq qIMp].
+apply qIMp.
+
+intro pIMqETqIMp.
+split.
+destruct pIMqETqIMp as [pIMq qIMp].
+apply pIMq.
+destruct pIMqETqIMp as [pIMq qIMp].
+exact qIMp.
+Qed.
 
 (* partie 3 *)
 
 Lemma exemple134 (A B C : Prop) : (A /\ B -> C) <-> (A -> B -> C).
-Abort.
+split.
+intros aEbIMc a b.
+apply aEbIMc.
+split.
+apply a.
+apply b.
+
+intros aIMbIMc aEb.
+destruct aEb as [a b].
+apply aIMbIMc.
+apply a.
+apply b.
+Qed.
 
 Lemma exemple135 (A B C : Prop) : (C -> A) \/ (C -> B) -> (C -> A \/ B).
 intros caOcb c.
-Abort.
+destruct caOcb.
+left.
+apply H.
+apply c.
+right.
+apply H.
+apply c.
+Qed.
 
 Lemma exemple_136 (X : Type) (A B : X -> Prop) :
   ((forall x, A x) \/ (forall x, B x)) -> forall x, A x \/ B x.
-Abort.
+intro test.
+destruct test.
+left.
+apply H.
+right.
+apply H.
+Qed.
 
 Lemma exemple_137 (X : Type) (A B : X -> Prop) :
   (exists x, A x /\ B x) -> ((exists x, A x) /\ (exists x, B x)).
-Abort.
+intro test.
+destruct test as [x abx].
+destruct abx as [ax bx].
+split.
+exists x.
+apply ax.
+exists x.
+apply bx.
+Qed.
 
 Lemma exemple_138 (A B : Prop) : ~ (A /\ B) -> ( ~ A \/ ~ B).
-Abort.
+apply exo12.
+intro Naeb.
+left.
+intro a.
+destruct Naeb.
+split.
+apply a.
+
 
 Lemma exemple_138' (A B : Prop) : ~ (A /\ B) -> ( ~ A \/ ~ B).
 Abort.
