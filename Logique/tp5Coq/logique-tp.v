@@ -132,15 +132,16 @@ apply H1.
 apply H.
 
 intro NnpEnq.
+left.
 apply bottom_c.
-intro Npoq.
+intro np.
 destruct NnpEnq.
-apply and_not_or.
 split.
-destruct Npoq.
-
 apply np.
-intro q.
+apply bottom_c.
+intro nnq.
+destruct np.
+
 Abort.
 
 Lemma exo13 (P : Prop) : ~ P <-> (P -> False).
@@ -224,19 +225,20 @@ apply bx.
 Qed.
 
 Lemma exemple_138 (A B : Prop) : ~ (A /\ B) -> ( ~ A \/ ~ B).
-apply exo12.
 intro Naeb.
 left.
 intro a.
 destruct Naeb.
 split.
 apply a.
+Abort.
 
 
 Lemma exemple_138' (A B : Prop) : ~ (A /\ B) -> ( ~ A \/ ~ B).
 Abort.
 
 Lemma exemple_139 (X : Type) : forall (x1 x2 : X), x1 = x2 -> x2 = x1.
+intros x x2 xEgx2.
 Abort.
 
 Lemma exemple_140 (X : Type) : forall (x1 x2 x3 : X), x1 = x2 /\ x2 = x3 -> x1 = x3.
