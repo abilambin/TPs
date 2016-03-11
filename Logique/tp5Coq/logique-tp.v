@@ -229,7 +229,15 @@ Qed.
 
 Lemma exemple_138 (A B : Prop) : ~ (A /\ B) -> ( ~ A \/ ~ B).
 intro Naeb.
+left.
+intro a.
 destruct Naeb.
+split.
+apply a.
+apply bottom_c.
+intro nb.
+destruct nb.
+Abort.
 
 
 Lemma exemple_138' (A B : Prop) : ~ (A /\ B) -> ( ~ A \/ ~ B).
@@ -368,11 +376,21 @@ intros y z.
 exists y.
 exact z.
 
-intros e x y.
-destruct e.
-
-
-Abort.
+intro e.
+intro x.
+intro y.
+destruct e as [a p].
+exact (y a p).
+Qed.
 
 Lemma EQ_eq (A : Type) (a a' : A) : EQ _ a a' <-> a = a'.
-Abort.
+split.
+intro x.
+apply x.
+reflexivity.
+
+intro aEqa2.
+intros x y.
+destruct aEqa2.
+apply y.
+Qed.
