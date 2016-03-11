@@ -132,17 +132,20 @@ apply H1.
 apply H.
 
 intro NnpEnq.
-left.
 apply bottom_c.
 intro np.
 destruct NnpEnq.
 split.
-apply np.
-apply bottom_c.
-intro nnq.
+intro p.
 destruct np.
+left.
+apply p.
+intro q.
+destruct np.
+right.
+exact q.
+Qed.
 
-Abort.
 
 Lemma exo13 (P : Prop) : ~ P <-> (P -> False).
 split.
@@ -226,30 +229,56 @@ Qed.
 
 Lemma exemple_138 (A B : Prop) : ~ (A /\ B) -> ( ~ A \/ ~ B).
 intro Naeb.
-left.
-intro a.
 destruct Naeb.
-split.
-apply a.
-Abort.
 
 
 Lemma exemple_138' (A B : Prop) : ~ (A /\ B) -> ( ~ A \/ ~ B).
-Abort.
+intro Naeb.
+apply exo12.
+intro nnaOnnb.
+destruct Naeb.
+destruct nnaOnnb as [nna nnb].
+split.
+apply NNPP.
+exact nna.
+apply NNPP.
+exact nnb.
+Qed.
 
 Lemma exemple_139 (X : Type) : forall (x1 x2 : X), x1 = x2 -> x2 = x1.
 intros x x2 xEgx2.
-Abort.
+rewrite xEgx2.
+exists.
+Qed.
 
 Lemma exemple_140 (X : Type) : forall (x1 x2 x3 : X), x1 = x2 /\ x2 = x3 -> x1 = x3.
-Abort.
+intros x x2 x3.
+intro xEqx2ETx2Eqx3.
+destruct xEqx2ETx2Eqx3 as [xEqx2 x2Eqx3].
+rewrite xEqx2.
+rewrite x2Eqx3.
+exists.
+Qed.
 
 (* partie 4 *)
 
 Definition FALSE : Prop := forall (P : Prop), P.
+Goal FALSE.
+unfold FALSE.
+intros p.
+Abort.
 
 Lemma FALSE_False : FALSE <-> False.
-Abort.
+split.
+intro F.
+apply F.
+
+intro f.
+intro p.
+apply bottom_c.
+intro np.
+exact f.
+Qed.
 
 Definition AND (A B : Prop) := forall (P : Prop), (A -> B -> P) -> P.
 
@@ -260,27 +289,89 @@ Definition EX (A : Type) (P : A -> Prop) := forall (Q : Prop), (forall a, P a ->
 Definition EQ (A : Type) (a a' : A) := forall (P : A -> Prop), P a -> P a'.
 
 Lemma SPLIT (A B : Prop) : A -> B -> AND A B.
-Abort.
+intros a b.
+intro x.
+intro y.
+apply y.
+apply a.
+exact b. 
+Qed.
 
 Lemma PROJ1 (A B : Prop) : AND A B -> A.
-Abort.
+intro x.
+apply x.
+intros a b.
+exact a.
+Qed.
 
 Lemma PROJ2 (A B : Prop) : AND A B -> B.
-Abort.
+intro x.
+apply x.
+intros a b.
+exact b.
+Qed.
 
 Lemma ORINTROL (A B : Prop) : A -> OR A B.
-Abort.
+intro a.
+intros x y z.
+apply y.
+exact a.
+Qed.
 
 Lemma ORINTROR (A B : Prop) : B -> OR A B.
-Abort.
+intro b.
+intros x y z.
+apply z.
+exact b.
+Qed.
 
 Lemma AND_and (A B : Prop) : AND A B <-> A /\ B.
-Abort.
+split.
+intros x.
+apply x.
+intros a b.
+split.
+exact a.
+exact b.
+
+intros aEb x y.
+destruct aEb as [a b].
+apply y.
+exact a.
+exact b.
+Qed.
 
 Lemma OR_or (A B : Prop) : OR A B <-> A \/ B.
-Abort.
+split.
+intro o.
+apply o.
+intro a.
+left.
+exact a.
+intro b.
+right.
+exact b.
+
+intros aOb x y z.
+destruct aOb.
+apply y.
+apply H.
+apply z.
+apply H.
+Qed.
 
 Lemma EX_exists (A : Type) (P : A -> Prop) : EX A P <-> exists a, P a.
+split.
+intro x.
+apply x.
+intros y z.
+exists y.
+exact z.
+
+intros e x y.
+destruct e.
+
+
 Abort.
 
 Lemma EQ_eq (A : Type) (a a' : A) : EQ _ a a' <-> a = a'.
