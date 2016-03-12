@@ -9,35 +9,34 @@ Lemma hilbertS (A B C : Prop) :
 Proof.
 intros abc ab a.
 apply abc.
-- exact a.
-- apply ab.
+exact a.
+apply ab.
 exact a.
 Qed.
 
 (* partie 2.1 *)
 
 Lemma exo1 (P Q : Prop) : P -> (Q -> P).
-Proof.
-intros p _.
+intros p q.
 exact p.
 Qed.
 
 Lemma exo2 (P Q : Prop) : P -> ( ~ P -> Q).
-Proof.
 intros p np.
 destruct np.
 exact p.
 Qed.
 
-Lemma exo3 (P Q R : Prop) : (P -> Q) -> ((Q -> R) -> (P -> R)).
+Lemma exo3 (P Q R : Prop) : 
+ (P -> Q) -> ((Q -> R) -> (P -> R)).
 intros pq qr p.
-Inductive False : Prop := .
 apply qr.
 apply pq.
 exact p.
 Qed.
 
-Lemma exo4 (P Q : Prop) : (P -> Q) -> ( ~ Q -> ~ P).
+Lemma exo4 (P Q : Prop) : 
+ (P -> Q) -> ( ~ Q -> ~ P).
 intros pq nq.
 intros p.
 apply nq.
@@ -48,7 +47,8 @@ Qed.
 
 Require Import Classical.
 
-Lemma bottom_c (A : Prop) : ((~A) -> False) -> A.
+Lemma bottom_c (A : Prop) : 
+ ((~A) -> False) -> A.
 intros naf.
 apply NNPP.
 intros na.
@@ -56,7 +56,8 @@ destruct naf.
 exact na.
 Qed.
 
-Lemma exo5 (P Q : Prop) : ( ~ Q -> ~ P) -> (P -> Q).
+Lemma exo5 (P Q : Prop) : 
+ ( ~ Q -> ~ P) -> (P -> Q).
 intros nqnp p.
 apply bottom_c.
 intro nq.
@@ -65,7 +66,8 @@ exact nq.
 exact p.
 Qed.
 
-Lemma exo6 (P : Prop) : ~ ~ P -> P.
+Lemma exo6 (P : Prop) :
+ ~ ~ P -> P.
 intro nnp.
 apply bottom_c.
 intro np.
@@ -73,21 +75,24 @@ destruct nnp.
 exact np.
 Qed.
 
-Lemma exo7 (P : Prop) : P -> ~ ~ P.
+Lemma exo7 (P : Prop) : 
+ P -> ~ ~ P.
 intro p.
 intro np.
 apply np.
 exact p.
 Qed.
 
-Lemma exo8 (P Q R : Prop) : (P -> (Q -> R)) -> (P /\ Q -> R).
+Lemma exo8 (P Q R : Prop) : 
+ (P -> (Q -> R)) -> (P /\ Q -> R).
 intros pqr pOq.
 apply pqr.
 apply pOq.
 apply pOq.
 Qed.
 
-Lemma exo9 (P Q R : Prop) : (P /\ Q -> R) -> (P -> (Q -> R)).
+Lemma exo9 (P Q R : Prop) : 
+ (P /\ Q -> R) -> (P -> (Q -> R)).
 intros pqr p q.
 apply pqr.
 split.
@@ -119,7 +124,8 @@ exact b .
 Qed .
 
 
-Lemma exo12 (P Q : Prop) : P \/ Q <-> ~ ( ~ P /\ ~ Q).
+Lemma exo12 (P Q : Prop) : 
+ P \/ Q <-> ~ ( ~ P /\ ~ Q).
 split.
 intro pOq.
 intro npEnq.
@@ -147,7 +153,8 @@ exact q.
 Qed.
 
 
-Lemma exo13 (P : Prop) : ~ P <-> (P -> False).
+Lemma exo13 (P : Prop) : 
+ ~ P <-> (P -> False).
 split.
 intros np p.
 destruct np.
@@ -155,12 +162,12 @@ apply p.
 
 intro pf.
 intro p.
-apply exo11.
 apply pf.
 apply p.
 Qed.
 
-Lemma exo14 (P Q : Prop) : (P <-> Q) <-> (P -> Q) /\ (Q -> P).
+Lemma exo14 (P Q : Prop) : 
+ (P <-> Q) <-> (P -> Q) /\ (Q -> P).
 split.
 intro pEQq.
 split.
@@ -194,7 +201,8 @@ apply a.
 apply b.
 Qed.
 
-Lemma exemple135 (A B C : Prop) : (C -> A) \/ (C -> B) -> (C -> A \/ B).
+Lemma exemple135 (A B C : Prop) : 
+ (C -> A) \/ (C -> B) -> (C -> A \/ B).
 intros caOcb c.
 destruct caOcb.
 left.
@@ -227,16 +235,9 @@ exists x.
 apply bx.
 Qed.
 
-Lemma exemple_138 (A B : Prop) : ~ (A /\ B) -> ( ~ A \/ ~ B).
+Lemma exemple_138 (A B : Prop) :
+  ~ (A /\ B) -> ( ~ A \/ ~ B).
 intro Naeb.
-left.
-intro a.
-destruct Naeb.
-split.
-apply a.
-apply bottom_c.
-intro nb.
-destruct nb.
 Abort.
 
 
@@ -253,13 +254,15 @@ apply NNPP.
 exact nnb.
 Qed.
 
-Lemma exemple_139 (X : Type) : forall (x1 x2 : X), x1 = x2 -> x2 = x1.
+Lemma exemple_139 (X : Type) : 
+ forall (x1 x2 : X), x1 = x2 -> x2 = x1.
 intros x x2 xEgx2.
 rewrite xEgx2.
 exists.
 Qed.
 
-Lemma exemple_140 (X : Type) : forall (x1 x2 x3 : X), x1 = x2 /\ x2 = x3 -> x1 = x3.
+Lemma exemple_140 (X : Type) : 
+ forall (x1 x2 x3 : X), x1 = x2 /\ x2 = x3 -> x1 = x3.
 intros x x2 x3.
 intro xEqx2ETx2Eqx3.
 destruct xEqx2ETx2Eqx3 as [xEqx2 x2Eqx3].
@@ -288,13 +291,17 @@ intro np.
 exact f.
 Qed.
 
-Definition AND (A B : Prop) := forall (P : Prop), (A -> B -> P) -> P.
+Definition AND (A B : Prop) := 
+ forall (P : Prop), (A -> B -> P) -> P.
 
-Definition OR (A B : Prop) := forall (P : Prop), ((A -> P) -> (B -> P) -> P).
+Definition OR (A B : Prop) := 
+ forall (P : Prop), ((A -> P) -> (B -> P) -> P).
 
-Definition EX (A : Type) (P : A -> Prop) := forall (Q : Prop), (forall a, P a -> Q) -> Q.
+Definition EX (A : Type) (P : A -> Prop) := 
+ forall (Q : Prop), (forall a, P a -> Q) -> Q.
 
-Definition EQ (A : Type) (a a' : A) := forall (P : A -> Prop), P a -> P a'.
+Definition EQ (A : Type) (a a' : A) := 
+ forall (P : A -> Prop), P a -> P a'.
 
 Lemma SPLIT (A B : Prop) : A -> B -> AND A B.
 intros a b.
@@ -368,7 +375,8 @@ apply z.
 apply H.
 Qed.
 
-Lemma EX_exists (A : Type) (P : A -> Prop) : EX A P <-> exists a, P a.
+Lemma EX_exists (A : Type) (P : A -> Prop) : 
+ EX A P <-> exists a, P a.
 split.
 intro x.
 apply x.
@@ -393,4 +401,13 @@ intro aEqa2.
 intros x y.
 destruct aEqa2.
 apply y.
+Qed.
+
+Lemma subsidiaire (A : Prop) : ~~( A \/ ~ A).
+apply exo7.
+apply exo12.
+intro n.
+destruct n as [na nna].
+destruct nna.
+exact na.
 Qed.
