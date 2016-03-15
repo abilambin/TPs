@@ -10,21 +10,19 @@ import java.util.*;
 
 public class DNSsimple
 {
-	
+    
     public static void main(String[] args) 
     {
 	byte[] message = {(byte) 0x08, (byte) 0xbb,  (byte) 0x01, (byte) 0x00,/* a) 12 octets d'entete : 1 Question et 0 Reponse/Auth/Add */
 			  (byte) 0x00, (byte) 0x01,  (byte) 0x00, (byte) 0x00, 
 			  (byte) 0x00, (byte) 0x00,  (byte) 0x00, (byte) 0x00, 
-			  
-			  /* (byte) 0x03, (byte) 0x77,  (byte) 0x77, (byte) 0x77,  b.1) Question : - QNAME  "3www4lifl2fr0" 
+			  (byte) 0x03, (byte) 0x77,  (byte) 0x77, (byte) 0x77,/* b.1) Question : - QNAME  "3www4lifl2fr0"           */
 			  (byte) 0x04, (byte) 0x6c,  (byte) 0x69, (byte) 0x66,
-			  (byte) 0x6c, (byte) 0x02,  (byte) 0x66, (byte) 0x72, (byte) 0x00,   */ 
-			  
-			  (byte) 0x00, (byte) 0x01,                           /* b.2)            - QTYPE   "A"  1 : a host address */
-			  (byte) 0x00, (byte) 0x01 };                         /* b.3)            - QCLASS  "IN" 1 : the Internet */
-	
-	
+			  (byte) 0x6c, (byte) 0x02,  (byte) 0x66, (byte) 0x72,
+			  (byte) 0x00,                                        
+			  (byte) 0x00, (byte) 0x01,                           /* b.2)            - QTYPE   "A"  1 : a host address  */
+			  (byte) 0x00, (byte) 0x01 };                         /* b.3)            - QCLASS  "IN" 1 : the Internet    */
+		
 	
 	/* 1) Get DNS server address ... by DNS ... (??!)  */
 	System.err.print(" get inetaddress by name ... (on peut bien entendu mieux faire) ");
@@ -38,7 +36,7 @@ public class DNSsimple
 	System.err.println("[ok]");
 	
 	/* 2) creation d'un DatagramPacket pour l'envoi de la question DNS */
-	System.err.println(" preparing  datagrampacket, message size : "+message.length);
+	System.err.println(" preparing  datagrampacket, message size : "+message.length  );
 	DatagramPacket dp = new DatagramPacket(message,message.length,destination,53);
 	
 	/* 3) creation d'un DatragramSocket (port au choix ) */
