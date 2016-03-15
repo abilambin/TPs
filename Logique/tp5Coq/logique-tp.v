@@ -237,9 +237,25 @@ Qed.
 
 Lemma exemple_138 (A B : Prop) :
   ~ (A /\ B) -> ( ~ A \/ ~ B).
-intro Naeb.
-Abort.
+unfold not.
+intros aebif.
+apply bottom_c.
+unfold not.
+intros aifobif.
+apply aebif.
+split.
+apply bottom_c.
+intros na.
+apply aifobif.
+left.
+exact na.
 
+apply bottom_c.
+intros nb.
+apply aifobif.
+right.
+exact nb.
+Qed.
 
 Lemma exemple_138' (A B : Prop) : ~ (A /\ B) -> ( ~ A \/ ~ B).
 intro Naeb.
