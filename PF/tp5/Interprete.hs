@@ -55,7 +55,7 @@ exprsP = do exp <- unOuPlus exprP
 
 -- 6
 lambdaP :: Parser Expression
-lambdaP = do car '\\'
+lambdaP = do (car '\\' ||| car 'λ')
              espacesP
              x <- nomP
              espacesP
