@@ -1,3 +1,0 @@
-nc -u -l -p "le_port_qu'on_veut" -o /dev/stderr -> /dev/null
-               5300
-hexdump "fichier"

@@ -1,0 +1,14 @@
+Fait par Loïc FABRE et Abigaïl LAMBIN
+ 
+Je n'ai pas fait d'interface graphique, je m'y suis pris trop tard et je m'y perdais.
+
+Commande pour compiler mes sources, pour générer la documentation, pour générer le fichier .jar et pour compiler les tests :   (il faut se placer dans le répertoire racine: tp3)
+make
+
+
+Commande pour executer :  (il faut se placer dans le répertoire racine: tp3)
+make args="val" run
+
+
+Commande pour nettoyer : (il faut se placer dans le répertoire racine: tp3)
+make clean

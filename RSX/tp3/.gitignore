@@ -12,5 +12,4 @@ desktop.ini
 ## Java
 *.class
 /.metadata/
-/.recommenders/
 /bin/
