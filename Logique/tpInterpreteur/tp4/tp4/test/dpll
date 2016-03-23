@@ -1,3 +1,0 @@
-dpll a + b.
-dpll (a + -b) * (b + c).
-dpll a * (b + c + -d) * (b + -c + e) * (b + -f) * (d + -e) * (-d + -e).

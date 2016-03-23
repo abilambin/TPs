@@ -48,4 +48,8 @@ public class Et extends Formule {
 		return new Ou(this.formule.negation(), this.formule2.negation());
 	}
 
+	@Override
+	public Formule entrerNegations(){
+		return new Et( this.formule.entrerNegations(), this.formule2.entrerNegations());
+	}
 }

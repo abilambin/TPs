@@ -1,3 +1,0 @@
-fnc A + -B.
-fnc (a => b) => (b => a).
-fnc -(A + B) <=> A * B.

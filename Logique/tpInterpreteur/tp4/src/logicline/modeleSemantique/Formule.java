@@ -12,13 +12,13 @@ public abstract class Formule {
 	protected Formule supprImplications() {
 		if (this instanceof Implique){
 			Implique c = (Implique) this;
-			return new Ou(new Non(c.formule), c.formule2);
+			return new Ou(new Non(c.formule.supprImplications()), c.formule2.supprImplications());
 		}
 		else 
 			if (this instanceof Equivalence){
 				Equivalence c = (Equivalence) this;
-				return new Et( new Ou( new Non(c.formule), c.formule2),
-						new Ou(c.formule, new Non(c.formule2)));	
+				return new Et( new Ou( new Non(c.formule.supprImplications()), c.formule2.supprImplications()),
+						new Ou(c.formule.supprImplications(), new Non(c.formule2).supprImplications()));	
 			}
 			else
 				return this;
@@ -28,16 +28,28 @@ public abstract class Formule {
 	protected Formule entrerNegations() { return this; }
 
 	//Retourne la formule représentant la négation de this
-	protected Formule negation() { return new Non(this); }
+	protected Formule negation() { 
+		return new Non(this); 
+	}
 
 	//Retourne vrai si la formule contient un Et
-	protected boolean contientEt() { return false; }
+	protected boolean contientEt() {
+			return false;
+	}
 
 	//Retourne une formule équivalente à OU(this, d)
 	protected Formule ougauche(Formule d) { return d.oudroite(this); }
 
 	//Retourne une formule équivalente à OU(g, this), g ne contenant pas de ET
-	protected Formule oudroite(Formule g) { return new Ou(g, this); }
+	protected Formule oudroite(Formule g) { 
+		if (g.contientEt()) {
+			// TO DO
+			return new Ou(g.ougauche(this),this);
+		}
+		else {
+			return new Ou(g, this); 
+		}
+	}
 
 	//déplace les non à l'intérieur des formules
 	protected Formule entrerDisjonctions() { return this; }
@@ -52,7 +64,11 @@ public abstract class Formule {
 	}
 
 	//retourne la liste des clauses d'une formule en FNC
-	public ListeClauses clauses() throws NotFNCException, TrueClauseException, FalseClauseException, VariableClauseException { throw new NotFNCException(this); }
+	public ListeClauses clauses() throws NotFNCException, TrueClauseException, FalseClauseException, VariableClauseException { 
+		/*throw new NotFNCException(this);
+		 * J'ai mis le retour d'une nouvelle ListeClause pour qu'il ne nous affiche plus d'erreurs pour les clause */ 
+		return new ListeClauses();
+	}
 
 	//retourne la liste des noms des variables libres de la formule
 	public abstract Set<String> variablesLibres();

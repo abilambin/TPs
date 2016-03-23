@@ -43,4 +43,9 @@ public class Implique extends Formule {
 		return ( this.formule.contientEt() || this.formule2.contientEt() );
 	}
 
+	@Override
+	public Formule entrerNegations(){
+		return new Implique( this.formule.entrerNegations(), this.formule2.entrerNegations());
+	}
+
 }
