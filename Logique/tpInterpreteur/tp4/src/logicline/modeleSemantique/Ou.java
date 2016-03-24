@@ -53,4 +53,5 @@ public class Ou extends Formule {
 	public boolean contientEt(){
 		return ( this.formule.contientEt() || this.formule2.contientEt() );
 	}
+
 }

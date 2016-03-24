@@ -42,13 +42,7 @@ public abstract class Formule {
 
 	//Retourne une formule équivalente à OU(g, this), g ne contenant pas de ET
 	protected Formule oudroite(Formule g) { 
-		if (g.contientEt()) {
-			// TO DO
-			return new Ou(g.ougauche(this),this);
-		}
-		else {
-			return new Ou(g, this); 
-		}
+			return new Ou(g,this);
 	}
 
 	//déplace les non à l'intérieur des formules
